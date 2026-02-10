@@ -1,0 +1,9 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.team.realestate</groupId>
+  <artifactId>realestate-portal</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Real Estate Management System</name>
+  <description>Group project for real estate property listing system using JSP, Servlets, JDBC and MySQL</description>
+</project>
