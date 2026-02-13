@@ -5,15 +5,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Real Estate</title>
-
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
-
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assests/css/style.css">
+	<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assests/css/header_style.css">
+	<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assests/css/footer_style.css">
 </head>
 
 <body>
 
+<div class="layout">
+
 <!-- Header -->
 <jsp:include page="/WEB-INF/views/component/header.jsp" />
+
+<main class="main">
 
 <section class="hero">
     <div class="container">
@@ -41,15 +47,19 @@
         </div>
 
         <div class="hero-image">
-            <img src="assets/images/house.jpg" alt="House">
+            <img src="${pageContext.request.contextPath}/assests/images/house.jpg" alt="House">
         </div>
 
     </div>
 </section>
 
+</main>
 
 <!-- Footer -->
 <jsp:include page="/WEB-INF/views/component/footer.jsp" />
 
+</div>
+
 </body>
+
 </html>

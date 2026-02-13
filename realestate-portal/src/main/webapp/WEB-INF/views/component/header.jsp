@@ -5,9 +5,10 @@
     <div class="logo">🏠 Real Estate</div>
 
     <nav class="nav">
-        <a href="top_offers.jsp">Top offers</a>
+    	<a href="index.jsp">Home</a>
+        <a href="top_offers123.jsp">Top offers</a>
         <a href="#">Search in offers</a>
-        <a href="#">About us</a>
+        <a href="about123.jsp">About us</a>
         <a href="#">Contact us</a>
     </nav>
     </div>

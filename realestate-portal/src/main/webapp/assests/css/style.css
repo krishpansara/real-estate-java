@@ -2,23 +2,26 @@
 
 /* Reset */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-}
+/* ===== Layout fix: one screen ===== */
 
 html, body {
     height: 100%;
+    margin: 0;
 }
 
-body {
+.layout {
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    background: #f4f6f7;
+    overflow: hidden; /* removes scroll */
 }
+
+.main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
 
 /* Container */
 
@@ -29,7 +32,7 @@ body {
     padding: 0 24px;
 }
 
-/* Header */
+/* Header 
 
 .header {
     background: white;
@@ -56,15 +59,16 @@ body {
     transition: 0.2s;
 }
 
+
 .nav a:hover {
     color: black;
 }
-
+*/
 /* Hero */
 
 .hero {
     flex: 1;
-    padding: 110px 0;
+    padding: 40px 0;
 }
 
 .hero .container {
@@ -146,7 +150,7 @@ body {
     border-radius: 16px;
 }
 
-/* Footer */
+/* Footer 
 
 .footer {
     background: #25b3a6;
@@ -179,7 +183,7 @@ body {
 .footer-nav a:hover {
     opacity: 1;
 }
-
+*/
 /* Responsive */
 
 @media (max-width: 1000px) {
