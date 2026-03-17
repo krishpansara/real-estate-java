@@ -25,6 +25,15 @@
             left: 20px;
             z-index: 1000;
         }
+        .row-inputs {
+		    display: flex;
+		    gap: 15px;
+	        flex-direction: row !important;
+		}
+		
+		.row-inputs .form-input-wrapper {
+		    flex: 1;
+		}
     </style>
 </head>
 
@@ -39,7 +48,25 @@
             <h1 class="signup-title">Don't Have an Account?</h1>
 
             <form class="signup-form" action="${pageContext.request.contextPath}/sign_up" method="post">
-
+                <div >
+	                <div class="form-group row-inputs">
+	                    <div class="form-input-wrapper">
+	                        <i class="fas fa-user form-input-icon"></i>
+	                        <input type="text" class="form-input"
+	                               name="fname"
+	                               placeholder="First Name"
+	                               required>
+	                    </div>
+	                    <div class="form-input-wrapper">
+	                        <i class="fas fa-user form-input-icon"></i>
+	                        <input type="text" class="form-input"
+	                               name="lname"
+	                               placeholder="Last Name"
+	                               required>
+	                    </div>
+	                </div>
+                </div>
+                
                 <div class="form-group">
                     <div class="form-input-wrapper">
                         <i class="fas fa-envelope form-input-icon"></i>

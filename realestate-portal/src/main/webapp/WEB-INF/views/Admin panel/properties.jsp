@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +57,7 @@
           <td>1.2 Cr</td>
           <td><span class="badge badge-green">Active</span></td>
           <td>
-            <button class="btn btn-edit">Edit</button>
+                        <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
             <button class="btn btn-delete">Delete</button>
           </td>
         </tr>
@@ -69,7 +70,7 @@
           <td>45 L</td>
           <td><span class="badge badge-orange">Pending</span></td>
           <td>
-            <button class="btn btn-edit">Edit</button>
+                        <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
             <button class="btn btn-delete">Delete</button>
           </td>
         </tr>
@@ -81,8 +82,8 @@
           <td>Plot</td>
           <td>18 L</td>
           <td><span class="badge badge-red">Sold</span></td>
-          <td>
-            <button class="btn btn-edit">Edit</button>
+          <td>            
+          <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
             <button class="btn btn-delete">Delete</button>
           </td>
         </tr>
@@ -95,8 +96,8 @@
           <td>78 L</td>
           <td><span class="badge badge-green">Active</span></td>
           <td>
-            <button class="btn btn-edit">Edit</button>
-            <button class="btn btn-delete">Delete</button>
+            <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
+      <button class="btn btn-delete">Delete</button>
           </td>
         </tr>
 
@@ -108,7 +109,8 @@
           <td>2.1 Cr</td>
           <td><span class="badge badge-green">Active</span></td>
           <td>
-            <button class="btn btn-edit">Edit</button>
+            <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
+            
             <button class="btn btn-delete">Delete</button>
           </td>
         </tr>
@@ -116,7 +118,95 @@
       </tbody>
     </table>
   </div>
+<!-- ADD / EDIT PROPERTY MODAL -->
+<div class="modal-overlay" id="prop-modal">
+  <div class="modal">
+    <h3 id="modal-title">Add New Property</h3>
+    <input type="hidden" id="edit-id">
 
+    <div class="form-group">
+      <label>Property Title *</label>
+      <input type="text" id="p-title" placeholder="e.g. Green Valley Villa">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Location / City *</label>
+        <input type="text" id="p-location" placeholder="e.g. Rajkot">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="p-type">
+          <option>Apartment</option>
+          <option>Villa</option>
+          <option>Plot</option>
+          <option>Bungalow</option>
+          <option>Commercial</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Price</label>
+        <input type="text" id="p-price" placeholder="e.g. ₹45 Lakh">
+      </div>
+      <div class="form-group">
+        <label>Area</label>
+        <input type="text" id="p-area" placeholder="e.g. 1200">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Bedrooms</label>
+        <select id="p-beds">
+          <option>1 BHK</option>
+          <option>2 BHK</option>
+          <option>3 BHK</option>
+          <option>4 BHK</option>
+          <option>4+ BHK</option>
+          <option>N/A</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="p-status">
+          <option>Active</option>
+          <option>Pending</option>
+          <option>Sold</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="p-desc" rows="3" placeholder="Short description (optional)..."></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProperty()">Save Property</button>
+    </div>
+  </div>
 </div>
+</div>
+<script>
+
+function closeModal() {
+	  document.getElementById('prop-modal').classList.remove('open');
+	}
+	
+function openAddModal() {
+	  document.getElementById('modal-title').textContent = 'Add New Property';
+	  document.getElementById('edit-id').value = '';
+	  ['p-title','p-location','p-price','p-area','p-desc'].forEach(id => document.getElementById(id).value = '');
+	  document.getElementById('p-type').value   = 'Apartment';
+	  document.getElementById('p-beds').value   = '2 BHK';
+	  document.getElementById('p-status').value = 'Active';
+	  document.getElementById('prop-modal').classList.add('open');
+	}
+
+</script>
 </body>
 </html>
