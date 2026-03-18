@@ -488,9 +488,11 @@
                             <a href="${pageContext.request.contextPath}/page?name=edit_profile" class="btn-outline-custom">
                                 <span>✏</span> Edit Profile
                             </a>
-                            <button class="btn-logout" onclick="logout()">
-                                <span>🚪</span> Logout
-                            </button>
+                            <form method="post" action="${pageContext.request.contextPath}/logout">
+	                            <button class="btn-logout">
+	                                <span>🚪</span> Logout
+	                            </button>
+	                        </form>
                         </div>
                     </div>
                 </div>
@@ -609,12 +611,7 @@
         function viewDetails(id) {
             window.location.href = '${pageContext.request.contextPath}/page?name=detailed_view&id=' + id;
         }
-        
-        function logout() {
-            if(confirm('Are you sure you want to logout?')) {
-                window.location.href = '${pageContext.request.contextPath}/page?name=login';
-            }
-        }
+
     </script>
     
 </body>
