@@ -25,6 +25,15 @@
             left: 20px;
             z-index: 1000;
         }
+        .error-message{
+		    color:#ff0000;
+		    font-size:0.85rem;
+		    margin-top:5px;
+		    display:none;
+		}
+		.input-error{
+		    border-color:#ff0000 !important;
+		}
     </style>
 </head>
 
@@ -38,27 +47,34 @@
         <section class="login-form-section">
             <h1 class="login-title">Login to Your Account</h1>
 
-            <form class="login-form" action="${pageContext.request.contextPath}/login" method="post">
+            <form class="login-form" 
+			      action="${pageContext.request.contextPath}/login" 
+			      method="post"
+			      novalidate>
 
-                <div class="form-group">
-                    <div class="form-input-wrapper">
-                        <i class="fas fa-envelope form-input-icon"></i>
-                        <input type="email" class="form-input"
-                               name="email"
-                               placeholder="Enter Your E-mail Address"
-                               required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="form-input-wrapper">
-                        <i class="fas fa-lock form-input-icon"></i>
-                        <input type="password" class="form-input"
-                               name="password"
-                               placeholder="Enter Your Password"
-                               required>
-                    </div>
-                </div>
+                <!-- Email -->
+				<div class="form-group">
+				    <div class="form-input-wrapper">
+				        <i class="fas fa-envelope form-input-icon"></i>
+				        <input type="email" class="form-input"
+				               id="email"
+				               name="email"
+				               placeholder="Enter Your E-mail Address">
+				    </div>
+				    <div class="error-message" id="emailError"></div>
+				</div>
+				
+				<!-- Password -->
+				<div class="form-group">
+				    <div class="form-input-wrapper">
+				        <i class="fas fa-lock form-input-icon"></i>
+				        <input type="password" class="form-input"
+				               id="password"
+				               name="password"
+				               placeholder="Enter Your Password">
+				    </div>
+				    <div class="error-message" id="passwordError"></div>
+				</div>
 
                 <div class="forgot-password-wrapper">
                     <a href="${pageContext.request.contextPath}/page?name=forgot_password" class="forgot-password">Forgot Password?</a>
@@ -74,7 +90,12 @@
                 </p>
 
             </form>
-        </section>
+            <% if(request.getAttribute("error") != null) { %>
+			    <div class="alert alert-danger">
+			        <%= request.getAttribute("error") %>
+			    </div>
+			<% } %>
+			 </section>
 
         <!-- Right Section - Image -->
         <aside class="login-image-section">
@@ -87,8 +108,64 @@
     </div>
 </main>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+		<script>
+		document.addEventListener("DOMContentLoaded", function(){
+		
+		    const form = document.querySelector(".login-form");
+		
+		    form.addEventListener("submit", function(e){
+		
+		        let valid = true;
+		
+		        function showError(id, message){
+		            const error = document.getElementById(id);
+		            const field = error.previousElementSibling.querySelector("input");
+		
+		            error.innerText = message;
+		            error.style.display = "block";
+		            field.classList.add("input-error");
+		            valid = false;
+		        }
+		
+		        function clearError(id){
+		            const error = document.getElementById(id);
+		            const field = error.previousElementSibling.querySelector("input");
+		
+		            error.innerText = "";
+		            error.style.display = "none";
+		            field.classList.remove("input-error");
+		        }
+		
+		        const email = document.getElementById("email").value.trim();
+		        const password = document.getElementById("password").value.trim();
+		
+		        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		
+		        clearError("emailError");
+		        clearError("passwordError");
+		
+		        if(email === ""){
+		            showError("emailError","Email is required");
+		        }
+		        else if(!emailPattern.test(email)){
+		            showError("emailError","Invalid email format");
+		        }
+		
+		        if(password === ""){
+		            showError("passwordError","Password is required");
+		        }
+		        else if(password.length < 6){
+		            showError("passwordError","Password must be at least 6 characters");
+		        }
+		
+		        if(!valid){
+		            e.preventDefault();
+		        }
+		    });
+		
+		});
+		</script>
 
 </body>
 </html>
