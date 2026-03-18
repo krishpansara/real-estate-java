@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +48,13 @@
         <!-- Left Section - Login Form -->
         <section class="login-form-section">
             <h1 class="login-title">Login to Your Account</h1>
+			<div class="server-error">			
 
+				<c:if test="${param.error == 'empty_fields'}">
+				    <p style="color:red;">All fields are required.</p>
+				</c:if>
+
+			</div>
             <form class="login-form" 
 			      action="${pageContext.request.contextPath}/login" 
 			      method="post"

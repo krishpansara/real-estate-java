@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +64,25 @@
         <!-- Left Section - Signup Form -->
         <section class="signup-form-section">
             <h1 class="signup-title">Don't Have an Account?</h1>
-
+            
+			<div class="server-error">
+				<c:if test="${param.error == 'password_mismatch'}">
+				    <p style="color:red;">Password and Confirm Password do not match.</p>
+				</c:if>
+				
+				<c:if test="${param.error == 'email_exists'}">
+				    <p style="color:red;">This email is already registered.</p>
+				</c:if>
+				
+				<c:if test="${param.error == 'empty_fields'}">
+				    <p style="color:red;">All fields are required.</p>
+				</c:if>
+				
+				<c:if test="${param.error == 'weak_password'}">
+				    <p style="color:red;">Password must be at least 6 characters long.</p>
+				</c:if>
+			</div>
+			
             <form class="signup-form" 
       			action="${pageContext.request.contextPath}/sign_up" 
 			      method="post"
