@@ -488,9 +488,11 @@
                             <a href="${pageContext.request.contextPath}/page?name=edit_profile" class="btn-outline-custom">
                                 <span>✏</span> Edit Profile
                             </a>
-                            <button class="btn-logout" onclick="logout()">
-                                <span>🚪</span> Logout
-                            </button>
+                            <form method="post" action="${pageContext.request.contextPath}/logout">
+	                            <button class="btn-logout">
+	                                <span>🚪</span> Logout
+	                            </button>
+	                        </form>
                         </div>
                     </div>
                 </div>
@@ -520,7 +522,7 @@
                                 <span class="icon">📍</span>
                                 Barcelona IV
                             </div>
-                            <div class="property-price">320 000€</div>
+                            <div class="property-price">320 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-edit" onclick="editProperty(1)">
                                     <span>✏</span> Edit
@@ -546,7 +548,7 @@
                                 <span class="icon">📍</span>
                                 Barcelona II
                             </div>
-                            <div class="property-price">315 000€</div>
+                            <div class="property-price">315 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-edit" onclick="editProperty(2)">
                                     <span>✏</span> Edit
@@ -572,7 +574,7 @@
                                 <span class="icon">📍</span>
                                 Madrid VI
                             </div>
-                            <div class="property-price">280 000€</div>
+                            <div class="property-price">280 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-edit" onclick="viewDetails(3)">
                                     <span>👁</span> View Details
@@ -609,12 +611,7 @@
         function viewDetails(id) {
             window.location.href = '${pageContext.request.contextPath}/page?name=detailed_view&id=' + id;
         }
-        
-        function logout() {
-            if(confirm('Are you sure you want to logout?')) {
-                window.location.href = '${pageContext.request.contextPath}/page?name=login';
-            }
-        }
+
     </script>
     
 </body>

@@ -350,10 +350,10 @@
                     <div class="col-md-3">
                         <select class="filter-input" id="priceRange">
                             <option value="">Select price</option>
-                            <option value="0-200000">Under 200,000€</option>
-                            <option value="200000-400000">200,000€ - 400,000€</option>
-                            <option value="400000-600000">400,000€ - 600,000€</option>
-                            <option value="600000+">Over 600,000€</option>
+                            <option value="0-200000">Under 200,000₹</option>
+                            <option value="200000-400000">200,000₹ - 400,000₹</option>
+                            <option value="400000-600000">400,000₹ - 600,000₹</option>
+                            <option value="600000+">Over 600,000₹</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -395,7 +395,7 @@
 	                    </div>
 	                    <div class="property-content">
 	                        <h3 class="property-title">Bright and airy 2-bedroom flat near the city center</h3>
-	                        <div class="property-price">320 000€</div>
+	                        <div class="property-price">320 000₹</div>
 	                        <div class="property-location">
 	                            <i class="fas fa-map-marker-alt"></i>
 	                            Barcelona IV.
@@ -413,7 +413,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Exclusive 5-room residence with a rooftop terrace</h3>
-                        <div class="property-price">495 000€</div>
+                        <div class="property-price">495 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Barcelona I.
@@ -430,7 +430,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Newly built 4-room apartment with premium finishes</h3>
-                        <div class="property-price">390 000€</div>
+                        <div class="property-price">390 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Madrid III.
@@ -447,7 +447,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Charming 2-bedroom flat in a prime urban area</h3>
-                        <div class="property-price">315 000€</div>
+                        <div class="property-price">315 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Barcelona VII.
@@ -464,7 +464,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Prestigious 5-bedroom home with a private rooftop</h3>
-                        <div class="property-price">450 000€</div>
+                        <div class="property-price">450 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Madrid II.
@@ -481,7 +481,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Modern 4-bedroom condo with luxurious details</h3>
-                        <div class="property-price">475 000€</div>
+                        <div class="property-price">475 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Barcelona IV.
@@ -498,7 +498,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Sunny 2-bedroom apartment close to downtown</h3>
-                        <div class="property-price">280 000€</div>
+                        <div class="property-price">280 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Barcelona V.
@@ -515,7 +515,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Luxury 5-bedroom dwelling with a rooftop oasis</h3>
-                        <div class="property-price">385 000€</div>
+                        <div class="property-price">385 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Barcelona IV.
@@ -532,7 +532,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Contemporary 4-bedroom unit with high-end features</h3>
-                        <div class="property-price">455 000€</div>
+                        <div class="property-price">455 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Madrid IV.
@@ -549,7 +549,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Spacious 2-bedroom apartment in a central location</h3>
-                        <div class="property-price">285 000€</div>
+                        <div class="property-price">285 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Barcelona IX.
@@ -566,7 +566,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Elegant 5-bedroom property with a sky-high terrace</h3>
-                        <div class="property-price">430 000€</div>
+                        <div class="property-price">430 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Madrid IX.
@@ -583,7 +583,7 @@
                     </div>
                     <div class="property-content">
                         <h3 class="property-title">Stylish 4-bedroom apartment with upscale amenities</h3>
-                        <div class="property-price">440 000€</div>
+                        <div class="property-price">440 000₹</div>
                         <div class="property-location">
                             <i class="fas fa-map-marker-alt"></i>
                             Barcelona II.

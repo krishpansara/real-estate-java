@@ -40,7 +40,10 @@ public class PageController {
 	    }
 	    else if ("profile".equals(name)) {
 	        return "Profile_pages/profile";
-	    } 
+	    }
+	    else if ("favourite".equals(name)) {
+	        return "Favorite/Favorite";
+	    }
 	    else if ("edit_profile".equals(name)) {  
 	        return "Profile_pages/edit_profile";
 	    } 
