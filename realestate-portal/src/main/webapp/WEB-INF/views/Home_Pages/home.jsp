@@ -36,18 +36,6 @@
                 purchase or rental of real estate.
                 We have been operating in Spain more than 15 years.
             </p>
-
-            <div class="search-box">
-                <input type="text" placeholder="Search of location">
-
-                <select>
-                    <option>Property type</option>
-                    <option>House</option>
-                    <option>Apartment</option>
-                </select>
-
-                <button>Search</button>
-            </div>
         </div>
 
         <div class="hero-image">
@@ -62,3 +50,4 @@
 
 </body>
 </html>
+

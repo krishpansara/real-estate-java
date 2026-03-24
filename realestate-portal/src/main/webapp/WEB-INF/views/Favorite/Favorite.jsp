@@ -300,7 +300,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 Barcelona IV
                             </div>
-                            <div class="property-price">320 000€</div>
+                            <div class="property-price">320 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-view" onclick="viewProperty(1)">
                                     <i class="fas fa-eye"></i> View
@@ -325,7 +325,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 Barcelona II
                             </div>
-                            <div class="property-price">315 000€</div>
+                            <div class="property-price">315 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-view" onclick="viewProperty(2)">
                                     <i class="fas fa-eye"></i> View
@@ -350,7 +350,7 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 Madrid VI
                             </div>
-                            <div class="property-price">1 800€/mo</div>
+                            <div class="property-price">1 800₹/mo</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-view" onclick="viewProperty(3)">
                                     <i class="fas fa-eye"></i> View

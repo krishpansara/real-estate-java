@@ -46,7 +46,7 @@
 <img src="${pageContext.request.contextPath}/assets/images/house1.png">
 <div class="card-body">
 <h3>Large 4-room apartment with a beautiful terrace</h3>
-<span class="price">320 000€</span>
+<span class="price">320 000₹</span>
 <p>Barcelona IV.</p>
 </div>
 </div>
@@ -55,7 +55,7 @@
 <img src="${pageContext.request.contextPath}/assets/images/house2.jpg">
 <div class="card-body">
 <h3>Magnificent duplex in a private villa</h3>
-<span class="price">315 000€</span>
+<span class="price">315 000₹</span>
 <p>Barcelona II.</p>
 </div>
 </div>
@@ -64,7 +64,7 @@
 <img src="${pageContext.request.contextPath}/assets/images/house3.jpg">
 <div class="card-body">
 <h3>5i large design apartment with terrace</h3>
-<span class="price">280 000€</span>
+<span class="price">280 000₹</span>
 <p>Madrid VI.</p>
 </div>
 </div>
@@ -73,7 +73,7 @@
 <img src="${pageContext.request.contextPath}/assets/images/house3.jpg">
 <div class="card-body">
 <h3>Elegant private apartment</h3>
-<span class="price">320 000€</span>
+<span class="price">320 000₹</span>
 <p>Madrid VII.</p>
 </div>
 </div>
