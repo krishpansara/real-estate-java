@@ -522,7 +522,7 @@
                                 <span class="icon">📍</span>
                                 Barcelona IV
                             </div>
-                            <div class="property-price">320 000€</div>
+                            <div class="property-price">320 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-edit" onclick="editProperty(1)">
                                     <span>✏</span> Edit
@@ -548,7 +548,7 @@
                                 <span class="icon">📍</span>
                                 Barcelona II
                             </div>
-                            <div class="property-price">315 000€</div>
+                            <div class="property-price">315 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-edit" onclick="editProperty(2)">
                                     <span>✏</span> Edit
@@ -574,7 +574,7 @@
                                 <span class="icon">📍</span>
                                 Madrid VI
                             </div>
-                            <div class="property-price">280 000€</div>
+                            <div class="property-price">280 000₹</div>
                             <div class="property-actions">
                                 <button class="btn-action btn-edit" onclick="viewDetails(3)">
                                     <span>👁</span> View Details
