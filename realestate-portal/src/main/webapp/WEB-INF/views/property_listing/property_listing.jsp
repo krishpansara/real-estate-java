@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,6 +147,13 @@
     .fu5 { animation-delay: .28s; }
     .fu6 { animation-delay: .34s; }
   </style>
+  <style>
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+</style>
 </head>
 <body>
 
@@ -166,7 +174,7 @@
     </div>
 
     <%-- Form posts to your property listing servlet --%>
-    <form action="${pageContext.request.contextPath}/property/add" method="post" enctype="multipart/form-data">
+    <form id="propertyForm" action="${pageContext.request.contextPath}/property/add" method="post" enctype="multipart/form-data">
 
       <%-- ── Basic Information ─────────────────── --%>
       <div class="scard fu fu2">
@@ -176,28 +184,31 @@
         <div class="mb-3">
           <label class="form-label">Property Title</label>
           <input type="text" class="form-control" name="title"
-                 placeholder="e.g. 2 BHK Flat in Navrangpura" required>
+                 placeholder="e.g. 2 BHK Flat in Navrangpura" >
+                 <small class="error text-danger"></small>
         </div>
 
         <%-- Purpose + Type --%>
         <div class="row g-3 mb-3">
           <div class="col-md-6">
             <label class="form-label">Purpose</label>
-            <select class="form-select" name="purpose" required>
+            <select class="form-select" name="purpose" >
               <option value="">Select Purpose</option>
               <option value="SALE">SALE</option>
               <option value="RENT">RENT</option>
             </select>
+            <small class="error text-danger"></small>
           </div>
           <div class="col-md-6">
             <label class="form-label">Property Type</label>
-            <select class="form-select" name="propertyType" required>
+            <select class="form-select" name="propertyType" >
               <option value="">Select Type</option>
               <option value="Flat">Flat</option>
               <option value="House">House</option>
               <option value="Villa">Villa</option>
               <option value="Plot">Plot</option>
             </select>
+            <small class="error text-danger"></small>
           </div>
         </div>
 
@@ -205,7 +216,8 @@
         <div class="mb-0">
           <label class="form-label">Price (&#8377;)</label>
           <input type="number" class="form-control" name="price"
-                 placeholder="Enter amount" min="0" required>
+                 placeholder="Enter amount" min="0" >
+                 <small class="error text-danger"></small>
           <div class="form-text">
             <i class="fas fa-info-circle me-1"></i>
             For Rent &rarr; Monthly amount &nbsp;|&nbsp; For Sale &rarr; Total amount
@@ -221,19 +233,22 @@
           <div class="col-md-6">
             <label class="form-label">City</label>
             <input type="text" class="form-control" name="city"
-                   placeholder="e.g. Ahmedabad" required>
+                   placeholder="e.g. Ahmedabad" >
+                   <small class="error text-danger"></small>
           </div>
           <div class="col-md-6">
             <label class="form-label">Locality</label>
             <input type="text" class="form-control" name="locality"
-                   placeholder="e.g. Navrangpura" required>
+                   placeholder="e.g. Navrangpura" >
+                   <small class="error text-danger"></small>
           </div>
         </div>
 
         <div class="mb-0">
           <label class="form-label">Google Maps Embed URL</label>
           <input type="url" class="form-control" name="mapEmbedUrl"
-                 placeholder="Paste the src URL from Google Maps embed code" required>
+                 placeholder="Paste the src URL from Google Maps embed code" >
+                 <small class="error text-danger"></small>
           <div class="form-text">
             <i class="fas fa-info-circle me-1"></i>
             Google Maps &rarr; Share &rarr; Embed a map &rarr; Copy the src URL
@@ -249,17 +264,20 @@
           <div class="col-md-4">
             <label class="form-label">Bedrooms</label>
             <input type="number" class="form-control" name="bedrooms"
-                   placeholder="e.g. 2" min="0" required>
+                   placeholder="e.g. 2" min="0" >
+                   <small class="error text-danger"></small>
           </div>
           <div class="col-md-4">
             <label class="form-label">Bathrooms</label>
             <input type="number" class="form-control" name="bathrooms"
-                   placeholder="e.g. 2" min="0" required>
+                   placeholder="e.g. 2" min="0" >
+                   <small class="error text-danger"></small>
           </div>
           <div class="col-md-4">
             <label class="form-label">Area Size (sq ft)</label>
             <input type="number" class="form-control" name="areaSize"
-                   placeholder="e.g. 1100" min="0" required>
+                   placeholder="e.g. 1100" min="0" >
+                   <small class="error text-danger"></small>
           </div>
         </div>
 
@@ -268,6 +286,7 @@
             <label class="form-label">Property Age (years)</label>
             <input type="number" class="form-control" name="propertyAge"
                    placeholder="e.g. 5" min="0">
+                   <small class="error text-danger"></small>
           </div>
           <div class="col-md-4">
             <label class="form-label">Furnishing</label>
@@ -277,6 +296,7 @@
               <option value="Semi-Furnished">Semi-Furnished</option>
               <option value="Unfurnished">Unfurnished</option>
             </select>
+            <small class="error text-danger"></small>
           </div>
           <div class="col-md-4">
             <label class="form-label">Facing</label>
@@ -287,6 +307,7 @@
               <option value="South">South</option>
               <option value="West">West</option>
             </select>
+            <small class="error text-danger"></small>
           </div>
         </div>
 
@@ -298,6 +319,7 @@
               <option value="Immediate">Immediate</option>
               <option value="Within 30 Days">Within 30 Days</option>
             </select>
+            <small class="error text-danger"></small>
           </div>
           <div class="col-md-6">
             <label class="form-label">Price Negotiable</label>
@@ -306,6 +328,7 @@
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </select>
+            <small class="error text-danger"></small>
           </div>
         </div>
       </div>
@@ -315,7 +338,8 @@
         <div class="scard-title"><i class="fas fa-align-left"></i> Description</div>
         <textarea class="form-control" name="description" rows="4"
                   placeholder="Describe your property — highlights, surroundings, special features..."
-                  required></textarea>
+                  ></textarea>
+                  <small class="error text-danger"></small>
       </div>
 
       <%-- ── Property Images ─────────────────────── --%>
@@ -323,7 +347,7 @@
         <div class="scard-title"><i class="fas fa-images"></i> Property Images</div>
 
         <div class="upload-zone" id="uploadZone">
-          <input type="file" id="imgInput" name="images" accept="image/*" multiple required
+          <input type="file" id="imgInput" name="images" accept="image/*" multiple 
                  onchange="previewImages(event)">
           <i class="fas fa-cloud-upload-alt"></i>
           <p class="mt-2">Drag &amp; drop images here, or <span>browse files</span></p>
@@ -331,6 +355,7 @@
         </div>
 
         <div id="previewGrid"></div>
+         <small id="imageError" class="text-danger"></small>
       </div>
 
       <%-- ── Submit ──────────────────────────────── --%>
@@ -392,6 +417,195 @@
       renderPreviews();
     });
   </script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script>
+$("#propertyForm").validate({
+
+    rules: {
+
+        title: {
+            required: true,
+            minlength: 3
+        },
+
+        purpose: {
+            required: true
+        },
+
+        propertyType: {
+            required: true
+        },
+
+        price: {
+            required: true,
+            number: true,
+            min: 1
+        },
+
+        city: {
+            required: true
+        },
+
+        locality: {
+            required: true
+        },
+
+        mapEmbedUrl: {
+            required: true,
+            url: true
+        },
+
+        bedrooms: {
+            required: true,
+            number: true,
+            min: 0
+        },
+
+        bathrooms: {
+            required: true,
+            number: true,
+            min: 0
+        },
+
+        areaSize: {
+            required: true,
+            number: true,
+            min: 1
+        },
+
+        propertyAge: {
+            number: true,
+            min: 0
+        },
+
+        furnishing: {
+            required: true
+        },
+
+        facing: {
+            required: true
+        },
+
+        availability: {
+            required: true
+        },
+
+        negotiable: {
+            required: true
+        },
+
+        description: {
+            required: true,
+            minlength: 10
+        }
+    },
+
+    messages: {
+
+        title: {
+            required: "Please enter property title",
+            minlength: "Minimum 3 characters required"
+        },
+
+        purpose: {
+            required: "Please select purpose"
+        },
+
+        propertyType: {
+            required: "Please select property type"
+        },
+
+        price: {
+            required: "Please enter price",
+            number: "Only numbers allowed",
+            min: "Price must be greater than 0"
+        },
+
+        city: {
+            required: "Please enter city name"
+        },
+
+        locality: {
+            required: "Please enter locality"
+        },
+
+        mapEmbedUrl: {
+            required: "Please provide map URL",
+            url: "Enter valid URL"
+        },
+
+        bedrooms: {
+            required: "Enter bedrooms",
+            number: "Invalid number",
+            min: "Cannot be negative"
+        },
+
+        bathrooms: {
+            required: "Enter bathrooms",
+            number: "Invalid number",
+            min: "Cannot be negative"
+        },
+
+        areaSize: {
+            required: "Enter area size",
+            number: "Invalid number",
+            min: "Must be greater than 0"
+        },
+
+        propertyAge: {
+            number: "Invalid number",
+            min: "Cannot be negative"
+        },
+
+        furnishing: {
+            required: "Select furnishing"
+        },
+
+        facing: {
+            required: "Select facing"
+        },
+
+        availability: {
+            required: "Select availability"
+        },
+
+        negotiable: {
+            required: "Select option"
+        },
+
+        description: {
+            required: "Enter description",
+            minlength: "Minimum 10 characters required"
+        }
+    },
+
+    errorElement: "small",
+    errorClass: "error",
+
+    highlight: function(element) {
+        $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function(element) {
+        $(element).removeClass("is-invalid");
+    }
+});
+</script>
+<script>
+$("#propertyForm").submit(function(e){
+
+    if ($("#imgInput")[0].files.length === 0) {
+        $("#imageError").text("Please upload at least one property image");
+        e.preventDefault();
+    }
+});
+
+$("#imgInput").on("change", function(){
+    $("#imageError").text("");
+});
+</script>
+
 
 </body>
 </html>

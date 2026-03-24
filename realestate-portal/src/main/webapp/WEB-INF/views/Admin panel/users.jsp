@@ -42,12 +42,12 @@
     <h2>User Management</h2>
     <span class="admin-badge">Admin</span>
   </div>
-
   <div class="toolbar">
     <h3>All Users</h3>
+<!-- 
     <button class="btn btn-primary" onclick="openAddModal()">+ Add User</button>
+ -->
   </div>
-
   <div class="card">
     <table>
       <thead>
