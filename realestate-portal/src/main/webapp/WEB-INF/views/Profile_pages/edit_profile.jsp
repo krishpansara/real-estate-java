@@ -375,6 +375,16 @@
             }
         }
         
+        .error-message{
+		    color:#ff0000;
+		    font-size:0.85rem;
+		    margin-top:5px;
+		    display:none;
+		}
+		
+		.input-error{
+		    border-color:#ff0000 !important;
+		}
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -421,7 +431,7 @@
                 </div>
                 -->
                 
-                <form id="editProfileForm" action="updateProfile.jsp" method="POST" enctype="multipart/form-data">
+                <form id="editProfileForm" action="updateProfile.jsp" method="POST" enctype="multipart/form-data" novalidate>
                     <!-- Profile Picture Section -->
                     <div class="form-card">
                         <div class="profile-picture-section">
@@ -450,45 +460,81 @@
                             <div class="col-md-6 mb-3">
                                 <label for="firstName" class="form-label">First Name <span class="required">*</span></label>
                                 <input type="text" class="form-control" id="firstName" name="firstName" value="John" required>
+								<div class="error-message" id="firstNameError"></div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="lastName" class="form-label">Last Name <span class="required">*</span></label>
                                 <input type="text" class="form-control" id="lastName" name="lastName" value="Doe" required>
+								<div class="error-message" id="lastNameError"></div>
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email Address <span class="required">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" class="form-control" id="email" name="email" value="john.doe@example.com" required>
-                                </div>
-                            </div>
+								<label for="email" class="form-label">Email Address <span class="required">*</span></label>
+								
+								<div class="input-group">
+								<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+								<input type="email" class="form-control" id="email" name="email" required>
+								</div>
+								
+								<div class="error-message" id="emailError"></div>
+								
+								</div>
                             <div class="col-md-6 mb-3">
                                 <label for="phone" class="form-label">Phone Number <span class="required">*</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                    <input type="tel" class="form-control" id="phone" name="phone" value="+1 234 567 8900" required>
-                                </div>
+									<span class="input-group-text"><i class="fas fa-phone"></i></span>
+									<input type="tel" class="form-control" id="phone" name="phone" maxlength="10">
+									</div>
+									
+									<div class="error-message" id="phoneError"></div>
                             </div>
                         </div>
+                        
+                        <div class="row">
+							    <div class="col-md-12 mb-3">
+							        <label for="aadhar" class="form-label">
+							            Aadhaar Number <span class="required">*</span>
+							        </label>
+							
+							        <div class="input-group">
+							            <span class="input-group-text">
+							                <i class="fas fa-id-card"></i>
+							            </span>
+							
+							            <input type="text"
+							                   class="form-control"
+							                   id="aadhar"
+							                   name="aadhar"
+							                   maxlength="12"
+							                   placeholder="Enter 12-digit Aadhaar Number"
+							                   oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+							        </div>
+							
+							        <div class="error-message" id="aadharError"></div>
+							    </div>
+							</div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" value="1990-01-01">
+                                <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth">
+								<div class="error-message" id="dobError"></div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="gender" class="form-label">Gender</label>
-                                <select class="form-select" id="gender" name="gender">
-                                    <option value="">Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
-                                    <option value="prefer_not_to_say">Prefer not to say</option>
-                                </select>
-                            </div>
+							    <label for="gender" class="form-label">Gender</label>
+							
+							    <select class="form-select" id="gender" name="gender">
+							        <option value="">Select Gender</option>
+							        <option value="male">Male</option>
+							        <option value="female">Female</option>
+							        <option value="other">Other</option>
+							        <option value="prefer_not_to_say">Prefer not to say</option>
+							    </select>
+							
+							    <div class="error-message" id="genderError"></div>
+							</div>
                         </div>
                     </div>
                     
@@ -502,28 +548,33 @@
                         
                         <div class="mb-3">
                             <label for="address" class="form-label">Street Address</label>
-                            <input type="text" class="form-control" id="address" name="address" placeholder="123 Main Street">
+                            <input type="text" class="form-control" id="address" name="address">
+							<div class="error-message" id="addressError"></div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" name="city" placeholder="Barcelona">
+                                <input type="text" class="form-control" id="city" name="city">
+								<div class="error-message" id="cityError"></div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="state" class="form-label">State/Province</label>
-                                <input type="text" class="form-control" id="state" name="state" placeholder="Catalonia">
+                                <input type="text" class="form-control" id="state" name="state">
+								<div class="error-message" id="stateError"></div>
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="zipCode" class="form-label">Zip/Postal Code</label>
-                                <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="08001">
+                                <input type="text" class="form-control" id="zipCode" name="zipCode">
+								<div class="error-message" id="zipError"></div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="country" class="form-label">Country</label>
-                                <input type="text" class="form-control" id="country" name="country" placeholder="India">
+                                <input type="text" class="form-control" id="country" name="country">
+								<div class="error-message" id="countryError"></div>
                             </div>
                         </div>
                     </div>
@@ -554,12 +605,27 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
-                            </div>
-                        </div>
+    
+							<label for="confirmPassword" class="form-label">
+							Confirm New Password
+							</label>
+							
+							<div class="input-group">
+							<span class="input-group-text">
+							<i class="fas fa-lock"></i>
+							</span>
+							
+							<input type="password"
+							class="form-control"
+							id="confirmPassword"
+							name="confirmPassword"
+							placeholder="Confirm new password">
+							
+							</div>
+							
+							<div class="error-message" id="confirmPasswordError"></div>
+							
+							</div>
                     </div>
                     
                     <!-- Action Buttons -->
@@ -673,18 +739,151 @@
         }
         
         // Form validation
-        document.getElementById('editProfileForm').addEventListener('submit', function(e) {
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (newPassword && newPassword !== confirmPassword) {
-                e.preventDefault();
-                alert('New password and confirm password do not match!');
-                return false;
-            }
-            
-            return true;
-        });
+     document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+
+				let valid = true;
+				
+				function showError(id,message){
+
+					const error=document.getElementById(id);
+					error.innerText=message;
+					error.style.display="block";
+
+					/* Find input/select inside same container */
+
+					const container=error.closest(".mb-3, .col-md-6");
+					if(container){
+					const field=container.querySelector("input, select");
+					if(field){
+					field.classList.add("input-error");
+					}
+					}
+
+					valid=false;
+
+					}
+
+				function clearError(id){
+
+					const error=document.getElementById(id);
+					error.innerText="";
+					error.style.display="none";
+
+					const container=error.closest(".mb-3, .col-md-6");
+					if(container){
+					const field=container.querySelector("input, select");
+					if(field){
+					field.classList.remove("input-error");
+					}
+					}
+					}
+				const firstName=document.getElementById("firstName").value.trim();
+				const lastName=document.getElementById("lastName").value.trim();
+				const email=document.getElementById("email").value.trim();
+				const phone=document.getElementById("phone").value.trim();
+				const dob=document.getElementById("dateOfBirth").value;
+				const address=document.getElementById("address").value.trim();
+				const city=document.getElementById("city").value.trim();
+				const state=document.getElementById("state").value.trim();
+				const zip=document.getElementById("zipCode").value.trim();
+				const country=document.getElementById("country").value.trim();
+				const gender = document.getElementById("gender").value;
+				const aadhar = document.getElementById("aadhar").value.trim();
+				
+				const emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				const phonePattern=/^[0-9]{10}$/;
+				const zipPattern=/^[0-9]{5,6}$/;
+			    const aadharPattern = /^[2-9]{1}[0-9]{11}$/;
+				
+				clearError("firstNameError");
+				clearError("lastNameError");
+				clearError("emailError");
+				clearError("phoneError");
+				clearError("dobError");
+				clearError("addressError");
+				clearError("cityError");
+				clearError("stateError");
+				clearError("zipError");
+				clearError("countryError");
+				clearError("confirmPasswordError");
+				clearError("genderError");
+				clearError("aadharError");
+				
+				if(firstName===""){
+				showError("firstNameError","First name is required");
+				}
+				
+				if(lastName===""){
+				showError("lastNameError","Last name is required");
+				}
+				
+				if(email===""){
+				showError("emailError","Email is required");
+				}
+				else if(!emailPattern.test(email)){
+				showError("emailError","Enter valid email address");
+				}
+				
+				if(phone===""){
+				showError("phoneError","Phone number is required");
+				}
+				else if(!phonePattern.test(phone)){
+				showError("phoneError","Phone must be 10 digits");
+				}
+				
+				if(dob===""){
+				showError("dobError","Date of birth required");
+				}
+				
+				if(address===""){
+				showError("addressError","Address required");
+				}
+				
+				if(city===""){
+				showError("cityError","City required");
+				}
+				
+				if(state===""){
+				showError("stateError","State required");
+				}
+				
+				if(zip===""){
+				showError("zipError","Zip code required");
+				}
+				else if(!zipPattern.test(zip)){
+				showError("zipError","Invalid zip code");
+				}
+				
+				if(country===""){
+				showError("countryError","Country required");
+				}
+				if(gender === ""){
+				    showError("genderError","Please select your gender");
+				}
+				  if(aadhar === ""){
+				        showError("aadharError","Aadhaar required");
+				    } else if(!aadharPattern.test(aadhar)){
+				        showError("aadharError","Enter valid 12-digit Aadhaar");
+				    }
+				
+				if(!valid){
+				e.preventDefault();
+				return false;
+				}
+				
+				/* YOUR ORIGINAL PASSWORD VALIDATION */
+				
+				const newPassword=document.getElementById("newPassword").value;
+				const confirmPassword=document.getElementById("confirmPassword").value;
+				
+				if(newPassword && newPassword!==confirmPassword){
+				e.preventDefault();
+				showError("confirmPasswordError","Passwords do not match");
+				return false;
+				}
+				
+				});
     </script>
 </body>
 </html>
+
