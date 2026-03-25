@@ -60,7 +60,21 @@
 </head>
 
 <body>
-
+		<%-- Place this right after <body> tag --%>
+			<%
+			    String status = (String) request.getAttribute("status");
+			    if ("success".equals(status)) {
+			%>
+			    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+			        ✅ Your message has been sent! We'll get back to you soon.
+			        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			    </div>
+			<% } else if ("error".equals(status)) { %>
+			    <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+			        ❌ Something went wrong. Please try again.
+			        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			    </div>
+			<% } %>
    <!-- Header -->
    <jsp:include page="/WEB-INF/views/component/header.jsp" />
 
@@ -112,7 +126,10 @@
                     <h2 class="section-title">Send us a Message</h2>
                     <p class="section-subtitle">Fill out the form below and we'll get in touch with you shortly</p>
 
-                    <form id="contactForm" novalidate>
+                    <form id="contactForm"
+					      action="${pageContext.request.contextPath}/contact"
+					      method="post"
+					      novalidate>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label">First Name <span class="required">*</span></label>
