@@ -59,6 +59,7 @@ public class AuthController {
 		
 		if ( userId != -1) {
 			
+			
 			request.getSession().invalidate();
 			HttpSession session = request.getSession(true);
 			
