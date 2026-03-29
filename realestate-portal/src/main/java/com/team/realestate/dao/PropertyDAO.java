@@ -3,26 +3,83 @@ package com.team.realestate.dao;
 import java.sql.*;
 import java.util.*;
 
+import com.team.realestate.db.DBConnection;
 import com.team.realestate.model.Property;
 
 public class PropertyDAO {
 
     private Connection con;
-
-    public PropertyDAO() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/real_estate_db",
-                "root",
-                ""
-            );
-
-        } catch (Exception e) {
+    
+    public List<Property> getRecentProperties(){
+    	List<Property> property_list = new ArrayList<>();
+    	String recentProprtySql = "SELECT `title`, `property_type`, `price`, `status` FROM `properties` ORDER BY `created_at` DESC LIMIT 7";
+    	
+    	try {
+    		
+    		Connection con = DBConnection.getConnection();
+    		PreparedStatement ps = con.prepareStatement(recentProprtySql);
+    		ResultSet rs = ps.executeQuery();
+    		
+    		while( rs.next() ) {
+				Property p = new Property();
+				p.setTitle(rs.getString("title"));
+				p.setPropertyType(rs.getString("property_type"));
+				p.setStatus(rs.getString("status"));
+				p.setPrice(rs.getDouble("price"));
+				property_list.add(p);
+    		}
+    		
+    	} catch ( Exception e ) {
             e.printStackTrace();
-        }
+    	}
+    	
+    	return property_list;
     }
+    
+    public List<Property> getAllAdminProperties(){
+    	List<Property> property_list = new ArrayList<>();
+    	String proprtySql = "SELECT `property_id`, `title`, `purpose`, `property_type`, `price`, `city`,`status`, `created_at` FROM `properties`";
+    	
+    	try {
+    		
+    		Connection con = DBConnection.getConnection();
+    		PreparedStatement ps = con.prepareStatement(proprtySql);
+    		ResultSet rs = ps.executeQuery();
+    		
+    		while( rs.next() ) {
+				Property p = new Property();
+				p.setProprtyId(rs.getInt("property_id"));
+				p.setTitle(rs.getString("title"));
+				p.setPurpose(rs.getString("purpose"));
+				p.setPropertyType(rs.getString("property_type"));
+				p.setCity(rs.getString("city"));
+				p.setStatus(rs.getString("status"));
+				p.setPrice(rs.getDouble("price"));
+				p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+				property_list.add(p);
+    		}
+    		
+    	} catch ( Exception e ) {
+            e.printStackTrace();
+    	}
+    	
+    	return property_list;
+    }
+
+//    public PropertyDAO() {
+//        try {
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//
+//            con = DriverManager.getConnection(
+//                "jdbc:mysql://localhost:3306/real_estate_db",
+//                "root",
+//                ""
+//            );
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     // INSERT PROPERTY
     public int insertProperty(Property p) {

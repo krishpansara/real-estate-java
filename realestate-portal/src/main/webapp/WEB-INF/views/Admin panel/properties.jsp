@@ -39,82 +39,37 @@
         <tr>
           <th>#</th>
           <th>Title</th>
-          <th>Location</th>
+          <th>City</th>
           <th>Type</th>
           <th>Price</th>
           <th>Status</th>
+          <th>Posted On</th>
           <th>Actions</th>
         </tr>
       </thead>
 
       <tbody>
-
-        <tr>
-          <td>1</td>
-          <td>Green Villa</td>
-          <td>Rajkot</td>
-          <td>Villa</td>
-          <td>1.2 Cr</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-                        <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            <button class="btn btn-delete">Delete</button>
+      <c:forEach var="p" items="${ propertiesList }">
+      	<tr>
+      		<td>${p.proprtyId}</td>
+      		<td>${p.title}</td>
+      		<td>${p.city}</td>
+      		<td>${p.propertyType}</td>
+      		<td>${p.price}</td>
+      		 <td><span class="badge 
+			    ${p.status eq 'active' ? 'badge-green' : 
+		      	p.status eq 'pending' ? 'badge-orange' : 
+			    p.status eq 'sold' ? 'badge-red' : ''}">
+			    ${p.status}
+			</span></td>
+      		<td>${p.createdAt}</td>
+      		<td>
+            	<button class="btn btn-edit" onClick="openAddModal()">Edit</button>
+            	<button class="btn btn-delete">Delete</button>
           </td>
-        </tr>
-
-        <tr>
-          <td>2</td>
-          <td>Sky Apartment</td>
-          <td>Ahmedabad</td>
-          <td>Apartment</td>
-          <td>45 L</td>
-          <td><span class="badge badge-orange">Pending</span></td>
-          <td>
-                        <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>3</td>
-          <td>Sunrise Plot</td>
-          <td>Surat</td>
-          <td>Plot</td>
-          <td>18 L</td>
-          <td><span class="badge badge-red">Sold</span></td>
-          <td>            
-          <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>4</td>
-          <td>Blue Lake Cottage</td>
-          <td>Vadodara</td>
-          <td>Bungalow</td>
-          <td>78 L</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-      <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>5</td>
-          <td>Prime Commercial Space</td>
-          <td>Ahmedabad</td>
-          <td>Commercial</td>
-          <td>2.1 Cr</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
+      	</tr>
+      
+      </c:forEach>
       </tbody>
     </table>
   </div>
