@@ -1,253 +1,457 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="detail_offer_globals.css" />
-    <link rel="stylesheet" href="detail_offer_styleguide.css" />
-    <link rel="stylesheet" href="detail_offer_style.css" />
-  </head>
-  <body>
-    <div class="d-detail-offer">
-      <div class="top-menu">
-        <div class="navbar">
-          <div class="horizontal-container">
-            <div class="logo">
-              <img class="img" src="assets/img/Logo_1.png" /> <img class="real-estate" src="assets/img/Real Estate_1.png" />
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Property Details - Real Estate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Project CSS -->
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header_style.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer_style.css">
+
+  <style>
+    :root {
+      --primary:      #1dd1a1;
+      --primary-dark: #10ac84;
+      --bg:     #f8f9fa;
+      --card:   #ffffff;
+      --ink:    #2d3436;
+      --muted:  #636e72;
+      --border: #f0f0f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .page-head {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 28px;
+    }
+    .back-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: none; background: var(--card);
+      box-shadow: 0 3px 12px rgba(0,0,0,.1);
+      display: grid; place-items: center;
+      cursor: pointer; flex-shrink: 0;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .back-btn:hover { transform: translateX(-2px); box-shadow: 0 5px 16px rgba(0,0,0,.14); }
+    .back-btn i { color: var(--primary-dark); font-size: .95rem; }
+    .page-head h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
+    .page-head p  { font-size: 13px; color: var(--muted); margin: 0; }
+
+    .prop-carousel { border-radius: 16px; overflow: hidden; position: relative; }
+    .prop-carousel .carousel-item img {
+      width: 100%; height: 400px;
+      object-fit: cover; display: block;
+    }
+    .prop-carousel .carousel-control-prev,
+    .prop-carousel .carousel-control-next {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,.92); border-radius: 50%;
+      top: 50%; transform: translateY(-50%);
+      opacity: 1; margin: 0 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.15);
+      transition: background .2s;
+    }
+    .prop-carousel .carousel-control-prev:hover,
+    .prop-carousel .carousel-control-next:hover { background: #fff; }
+    .prop-carousel .carousel-control-prev-icon,
+    .prop-carousel .carousel-control-next-icon {
+      filter: invert(48%) sepia(79%) saturate(476%) hue-rotate(118deg) brightness(90%);
+      width: 16px; height: 16px;
+    }
+    .prop-carousel .carousel-indicators { bottom: 12px; }
+    .prop-carousel .carousel-indicators button {
+      width: 8px; height: 8px; border-radius: 50%;
+      border: none; background: rgba(255,255,255,.55);
+      transition: background .2s, transform .2s;
+    }
+    .prop-carousel .carousel-indicators button.active {
+      background: var(--primary); transform: scale(1.3);
+    }
+    .img-counter {
+      position: absolute; bottom: 14px; right: 14px;
+      background: rgba(0,0,0,.48); color: #fff;
+      font-size: 12px; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px;
+      z-index: 10; pointer-events: none;
+    }
+
+    .wishlist-btn {
+      position: absolute; top: 14px; right: 14px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,.92); border: none;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,.18);
+      transition: background .2s, transform .2s; z-index: 5;
+    }
+    .wishlist-btn i { font-size: 1.15rem; color: #b2bec3; transition: color .25s, transform .25s; }
+    .wishlist-btn:hover { background: #fff; transform: scale(1.1); }
+    .wishlist-btn:hover i { color: #ff6b6b; }
+    .wishlist-btn.wishlisted { background: #fff5f5; }
+    .wishlist-btn.wishlisted i { color: #ff6b6b; transform: scale(1.15); }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 5px 13px; border-radius: 100px;
+    }
+    .pill-rent   { background: rgba(29,209,161,.12); color: var(--primary-dark); }
+    .pill-active { background: rgba(29,209,161,.12); color: var(--primary-dark); }
+
+    .price-tag { font-size: 2rem; font-weight: 700; color: var(--primary-dark); line-height: 1; }
+    .price-tag small { font-size: .9rem; font-weight: 400; color: var(--muted); }
+
+    .stat-chip {
+      background: var(--card); border-radius: 12px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-chip:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,.1); }
+    .stat-chip .icon {
+      width: 40px; height: 40px; background: rgba(29,209,161,.12);
+      border-radius: 10px; display: grid; place-items: center;
+      font-size: 1.05rem; color: var(--primary-dark); flex-shrink: 0;
+    }
+    .stat-chip .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .stat-chip .val { font-weight: 600; font-size: 14px; margin-top: 1px; }
+
+    .scard { background: var(--card); border-radius: 15px; padding: 24px; box-shadow: 0 5px 20px rgba(0,0,0,.06); }
+    .scard-title { font-size: .95rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .scard-title i { color: var(--primary); }
+
+    .ftag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(29,209,161,.08);
+      border: 1px solid rgba(29,209,161,.2);
+      border-radius: 8px; padding: 7px 14px; font-size: 13px;
+    }
+    .ftag i { color: var(--primary-dark); font-size: .85rem; }
+
+    .map-frame { width: 100%; height: 260px; border: 0; border-radius: 12px; display: block; }
+
+    .owner-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(29,209,161,.3); }
+
+    .btn-send {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff; border: none; border-radius: 10px;
+      padding: 12px; font-weight: 600; font-size: 14px;
+      font-family: 'Poppins', sans-serif; width: 100%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-send:hover { opacity: .9; transform: translateY(-1px); }
+
+    .form-control {
+      border-radius: 10px !important;
+      border: 1.5px solid #e9ecef !important;
+      background: var(--bg) !important;
+      font-family: 'Poppins', sans-serif; font-size: 13.5px;
+    }
+    .form-control:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(29,209,161,.15) !important;
+      background: #fff !important;
+    }
+    textarea.form-control { resize: none; }
+    .form-label { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+
+    /* jQuery Validation error styles */
+    label.error {
+      color: #dc3545;
+      font-size: 0.78rem;
+      margin-top: 5px;
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+    }
+    textarea.error {
+      border-color: #dc3545 !important;
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.12) !important;
+    }
+    textarea.valid {
+      border-color: #198754 !important;
+      box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.12) !important;
+    }
+    textarea.error:focus {
+      border-color: #dc3545 !important;
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.12) !important;
+    }
+    textarea.valid:focus {
+      border-color: #198754 !important;
+      box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.12) !important;
+    }
+
+    @media (min-width: 992px) { .sticky-side { position: sticky; top: 24px; } }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fu  { animation: fadeUp .5s ease both; }
+    .fu1 { animation-delay: .05s; }
+    .fu2 { animation-delay: .12s; }
+    .fu3 { animation-delay: .19s; }
+    .fu4 { animation-delay: .26s; }
+
+    hr { border-color: var(--border); }
+  </style>
+</head>
+<body>
+
+  <jsp:include page="/WEB-INF/views/component/header.jsp" />
+
+  <div class="container py-4" style="max-width:1160px">
+
+    <div class="page-head fu fu1">
+      <button class="back-btn" onclick="history.back()" title="Go Back">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div>
+        <h1>Property Details</h1>
+        <p>2 BHK Flat in Navrangpura, Ahmedabad</p>
+      </div>
+    </div>
+
+    <div class="row g-4 align-items-start">
+
+      <%-- LEFT COLUMN --%>
+      <div class="col-lg-8">
+
+        <div class="prop-carousel mb-4 fu fu1">
+          <div id="imgCarousel" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-indicators" id="carouselDots"></div>
+            <div class="carousel-inner" id="carouselSlides">
+              <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1000&q=85" alt="Photo 1">
+              </div>
+              <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1000&q=80" alt="Photo 2">
+              </div>
+              <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?w=1000&q=80" alt="Photo 3">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#imgCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#imgCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+          <div class="img-counter">
+            <i class="fas fa-images me-1"></i>
+            <span id="imgCurrent">1</span> / <span id="imgTotal"></span>
+          </div>
+          <button class="wishlist-btn" id="wishlistBtn" onclick="toggleWishlist()" title="Save to Wishlist">
+            <i class="far fa-heart" id="heartIcon"></i>
+          </button>
+        </div>
+
+        <div class="fu fu2 mb-4">
+          <div class="d-flex gap-2 mb-2">
+            <span class="pill pill-rent"><i class="fas fa-tag"></i> Rent</span>
+            <span class="pill pill-active"><i class="fas fa-circle" style="font-size:7px"></i> Active</span>
+          </div>
+          <h2 style="font-size:1.75rem;font-weight:700;margin-bottom:.3rem">2 BHK Flat in Navrangpura</h2>
+          <p class="mb-3" style="color:var(--muted);font-size:14px">
+            <i class="fas fa-map-marker-alt me-1" style="color:var(--primary)"></i> Navrangpura, Ahmedabad
+          </p>
+          <div class="price-tag">&#8377; 15,000 <small>/ month</small></div>
+        </div>
+
+        <div class="row g-3 mb-4 fu fu2">
+          <div class="col-6 col-sm-3">
+            <div class="stat-chip">
+              <div class="icon"><i class="fas fa-door-open"></i></div>
+              <div><div class="lbl">Bedrooms</div><div class="val">2 BHK</div></div>
             </div>
           </div>
-          <div class="div">
-            <div class="paragraph-container">
-              <div class="div-2">Top offers</div>
-              <div class="div-2">Search in offers</div>
-              <div class="div-2">About us</div>
-              <div class="div-2">Contact us</div>
+          <div class="col-6 col-sm-3">
+            <div class="stat-chip">
+              <div class="icon"><i class="fas fa-bath"></i></div>
+              <div><div class="lbl">Bathrooms</div><div class="val">2</div></div>
             </div>
+          </div>
+          <div class="col-6 col-sm-3">
+            <div class="stat-chip">
+              <div class="icon"><i class="fas fa-vector-square"></i></div>
+              <div><div class="lbl">Area</div><div class="val">1100 sq ft</div></div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-3">
+            <div class="stat-chip">
+              <div class="icon"><i class="fas fa-building"></i></div>
+              <div><div class="lbl">Property Age</div><div class="val">5 Years</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scard mb-4 fu fu3">
+          <div class="scard-title"><i class="fas fa-info-circle"></i> Property Details</div>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <span class="ftag"><i class="fas fa-building"></i> Flat</span>
+            <span class="ftag"><i class="fas fa-couch"></i> Semi-Furnished</span>
+            <span class="ftag"><i class="fas fa-compass"></i> East Facing</span>
+            <span class="ftag"><i class="fas fa-calendar-check"></i> Immediate</span>
+            <span class="ftag"><i class="fas fa-comments"></i> Negotiable</span>
+          </div>
+          <hr>
+          <div class="scard-title mt-3"><i class="fas fa-align-left"></i> Description</div>
+          <p style="color:var(--muted);line-height:1.8;font-size:14px">
+            Well-maintained 2 BHK flat located in a prime residential area
+            with excellent connectivity and nearby amenities.
+          </p>
+        </div>
+
+        <div class="scard fu fu4">
+          <div class="scard-title"><i class="fas fa-map-marked-alt"></i> Location</div>
+          <iframe class="map-frame"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.605102684762!2d70.9216!3d22.2431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959b4a660019ee9%3A0x3d6254f36ed0e794!2sRK%20University!5e0!3m2!1sen!2sin!4v1700000000000"
+            loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+      </div>
+
+      <%-- RIGHT SIDEBAR --%>
+      <div class="col-lg-4">
+        <div class="sticky-side">
+          <div class="scard fu fu2">
+            <div class="scard-title"><i class="fas fa-user-circle"></i> Contact Owner</div>
+
+            <div class="d-flex align-items-center gap-3 mb-4 p-3"
+                 style="background:rgba(29,209,161,.05);border-radius:12px;border:1px solid rgba(29,209,161,.15)">
+              <img src="https://i.pravatar.cc/150?img=12" class="owner-avatar" alt="Rahul Sharma">
+              <div>
+                <div style="font-weight:600;font-size:15px">Rahul Sharma</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:3px">
+                  <i class="fas fa-envelope me-1" style="color:var(--primary)"></i>rahul@gmail.com
+                </div>
+                <div style="font-size:13px;color:var(--muted)">
+                  <i class="fas fa-phone me-1" style="color:var(--primary)"></i>+91 98765 43210
+                </div>
+              </div>
+            </div>
+
+            <%-- novalidate removes HTML5 validation, required attribute removed from textarea --%>
+            <form id="contactOwnerForm" action="${pageContext.request.contextPath}/message/send" method="post" novalidate>
+              <div class="mb-3">
+                <label class="form-label">
+                  <i class="fas fa-comment-dots me-1" style="color:var(--primary)"></i>Your Message
+                </label>
+                <textarea class="form-control" name="message" rows="4"
+                          placeholder="Write your message here..."></textarea>
+              </div>
+              <button type="submit" class="btn-send">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </form>
+
           </div>
         </div>
       </div>
-      <div class="table">
-        <div class="container">
-          <div class="div-3">
-            <button class="button">
-              <img class="arrow" src="assets/img/Arrow.png" />
-              <div class="text-wrapper">Back</div>
-            </button>
-            <p class="home-title">Exclusive 5-room residence with a rooftop terrace</p>
-          </div>
-          <div class="content">
-            <div class="table-container">
-              <div class="table-container-2">
-                <img class="image" src="assets/img/Image_1.png" />
-                <div class="table-2">
-                  <div class="button-2">
-                    <div class="chevron-wrapper"><img class="chevron" src="assets/img/Chevron_1.png"/></div>
-                    <img class="img-2" src="assets/img/Image_2.png" />
-                    <img class="img-2" src="assets/img/Image_3.png" />
-                    <img class="img-2" src="assets/img/Image_4.png" />
-                    <div class="img-wrapper"><img class="chevron-2" src="assets/img/Chevron_2.png"/></div>
-                  </div>
-                  <div class="card">
-                    <div class="horizontal-container-2">
-                      <button class="button">
-                        <img class="img-3" src="assets/img/Flat.png" />
-                        <div class="text-wrapper-2">a Flat</div>
-                      </button>
-                      <button class="button">
-                        <img class="img-3" src="assets/img/Dimensions.png" />
-                        <div class="text-wrapper-2">224 m²</div>
-                      </button>
-                      <button class="button">
-                        <img class="img-3" src="assets/img/Location pin.png" />
-                        <div class="text-wrapper-2">Barcelona I.</div>
-                      </button>
-                    </div>
-                    <div class="button-3">
-                      <div class="paragraph-container-2">
-                        <div class="div-2">Mortgage since:</div>
-                        <div class="text-wrapper-3">807.57 €/ month</div>
-                      </div>
-                      <button class="primary-button-wrapper"><div class="primary-button">Get a mortage</div></button>
-                    </div>
-                    <div class="vertical-container">
-                      <div class="paragraph-container-3">
-                        <p class="p">
-                          Real estate offers an exclusive FOR SALE elegant large 5-room apartment on Vincent Hložník
-                          Street in the Condominium Renaissance residential complex.
-                        </p>
-                        <p class="text-wrapper-4">
-                          Thanks to its unique location, the property has access to a large Japanese garden with an area
-                          of 35 m², which can be accessed directly from the bedroom. The front of the apartment is at
-                          the height of the third floor, so the terrace is located just above the treetops, which gives
-                          the apartment a unique atmosphere. Overall, the apartment has a direct view of the Danube
-                          River and the surrounding forests.
-                        </p>
-                        <p class="text-wrapper-4">
-                          The apartment offers extraordinary comfort, has a first-class interior from the leading
-                          architectural office Cakov Makara and equipment from renowned world furniture manufacturers.
-                          The overall atmosphere of the apartment is completed
-                        </p>
-                      </div>
-                      <div class="div-4">
-                        <div class="text-wrapper-5">Basic characteristics:</div>
-                        <div class="flexcontainer">
-                          <p class="div-5"><span class="span">number of rooms: 5</span></p>
-                          <p class="div-5"><span class="span">2nd floor of 5</span></p>
-                          <p class="div-5"><span class="span">apartment area: 223.92 m2</span></p>
-                          <p class="div-5"><span class="span">terrace area: 27.09 m2</span></p>
-                          <p class="div-5"><span class="span">balcony area: 6.63 m2</span></p>
-                          <p class="div-5"><span class="span">area of ​​the Japanese garden: 35 m2</span></p>
-                        </div>
-                      </div>
-                      <div class="div-4">
-                        <div class="text-wrapper-5">Layout solution:</div>
-                        <p class="div-5">
-                          Kitchen, living room, study, 4 bedrooms, 2 bathrooms, wardrobe, fireplace. Two garage parking
-                          spaces in the underground garage.
-                        </p>
-                        <p class="div-5">
-                          The apartment is divided into day and night zone. The living area consists of a large living
-                          room, which is connected to the kitchen and dining room. In this part of the apartment there
-                          is also a study, which is very subtly separated from the living area by an elegant glass wall
-                          and wooden beams. From the living area there is a smooth transition to the night wing, where
-                          there are two rooms, a wardrobe, a shared bathroom and a master bedroom with a separate
-                          bathroom.
-                        </p>
-                      </div>
-                      <div class="div-4">
-                        <p class="text-wrapper-5">Execution and furnishing of the apartment:</p>
-                        <p class="div-5">
-                          The apartment has intelligent control via a mobile application. Premium natural materials -
-                          wood, stone tiles, cast concrete - are found in many places in the living space.
-                        </p>
-                        <p class="div-5">
-                          The kitchen of the LEICHT brand with SIEMENS appliances has been made to measure, bathrooms
-                          and toilets are equipped with sanitary ware from the manufacturers VILLEROY BOCH and
-                          HANSGROHE. In the master bathroom you will find the design edition of the AXOR MASSAUD brand,
-                          the master bedroom is dominated by the RUF BETTEN bed. The living room is equipped with ROLF
-                          BENZ brand products.
-                        </p>
-                      </div>
-                      <div class="div-4">
-                        <div class="text-wrapper-5">Location:</div>
-                        <p class="div-5">
-                          The apartment has intelligent control via a mobile application. Premium natural materials -
-                          wood, stone tiles, cast concrete - are found in many places in the living space.
-                        </p>
-                        <p class="div-5">
-                          The property is located above Passeig de Gràcia, there is an excellent transport connection.
-                          The nearby housing estate provides complete civic amenities, including shops, cafes,
-                          restaurants, schools, kindergartens and many other benefits.
-                        </p>
-                        <img class="image-2" src="assets/img/map.png" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-2">
-                <div class="card-3">
-                  <div class="text-wrapper-6">Contact us</div>
-                  <div class="vertical-container-wrapper">
-                    <div class="vertical-container-2">
-                      <img class="switch" src="assets/img/Image_person.png" />
-                      <div class="button-4">
-                        <div class="text-wrapper-7">Haylie Donin</div>
-                        <div class="text-input">
-                          <img class="phone" src="assets/img/Phone.svg" />
-                          <div class="text-wrapper-8">+34 555 781 731</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="div-3">
-                    <div class="text-input-2">
-                      <input class="input" placeholder="Full name" type="text" />
-                      <div class="input-2">
-                        <input class="search-of-location" placeholder="Your full name" type="text" />
-                      </div>
-                    </div>
-                    <div class="text-input-2">
-                      <input class="input" placeholder="Email" type="email" />
-                      <div class="input-2">
-                        <input class="search-of-location" placeholder="Your email" type="email" />
-                      </div>
-                    </div>
-                    <div class="text-input-2">
-                      <div class="text-wrapper-9">Your Message</div>
-                      <div class="input-3"><div class="search-of-location-2">Your message</div></div>
-                    </div>
-                    <button class="div-wrapper"><div class="primary-button-2">Send Message</div></button>
-                  </div>
-                </div>
-                <div class="vertical-container-3">
-                  <div class="text-wrapper-10">Brief characteristics</div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">City:</div>
-                    <div class="div-2">Barcelona I.</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Street:</div>
-                    <div class="text-wrapper-12">Vincent ala Carne</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Garages:</div>
-                    <div class="div-2">2 cars</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Type:</div>
-                    <div class="div-2">5 rooms</div>
-                  </div>
-                  <div class="paragraph-container-5">
-                    <div class="text-wrapper-11">Number of rooms:</div>
-                    <p class="div-2"><span class="span">&nbsp;</span> <span class="text-wrapper-13">5</span></p>
-                  </div>
-                  <div class="paragraph-container-5">
-                    <div class="text-wrapper-11">Usable area:</div>
-                    <div class="div-2">224 m2</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Total area:</div>
-                    <div class="div-2">307 m2</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Insulated object:</div>
-                    <div class="div-2">Yes</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Balcony:</div>
-                    <div class="div-2">Yes</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Terrace:</div>
-                    <div class="div-2">Yes</div>
-                  </div>
-                  <div class="paragraph-container-4">
-                    <div class="text-wrapper-11">Number of bathrooms:</div>
-                    <div class="div-2">1</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>  
-      <footer class="footer">
-        <div class="logo-2">
-          <img class="img" src="assets/img/Logo_2.png" /> <img class="real-estate" src="assets/img/Real Estate_2.png" />
-        </div>
-        <div class="paragraph-container">
-          <div class="text-wrapper-16">Top offers</div>
-          <div class="text-wrapper-16">Search in offers</div>
-          <div class="text-wrapper-16">References</div>
-          <div class="text-wrapper-16">About us</div>
-          <div class="text-wrapper-16">Our team</div>
-          <div class="text-wrapper-16">Contact</div>
-        </div>
-      </footer>
+
     </div>
-  </body>
+  </div>
+
+  <jsp:include page="/WEB-INF/views/component/footer.jsp" />
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <!-- jQuery Validation Plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+  <script>
+    // ── Wishlist toggle ──────────────────────────
+    let wishlisted = false;
+    function toggleWishlist() {
+      wishlisted = !wishlisted;
+      const btn  = document.getElementById('wishlistBtn');
+      const icon = document.getElementById('heartIcon');
+      btn.classList.toggle('wishlisted', wishlisted);
+      icon.className = wishlisted ? 'fas fa-heart' : 'far fa-heart';
+    }
+
+    // ── Carousel counter + dynamic dots ─────────
+    const carousel = document.getElementById('imgCarousel');
+    const slides   = carousel.querySelectorAll('.carousel-item');
+    const total    = slides.length;
+
+    document.getElementById('imgTotal').textContent = total;
+
+    const dotsWrap = document.getElementById('carouselDots');
+    slides.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.type  = 'button';
+      btn.setAttribute('data-bs-target', '#imgCarousel');
+      btn.setAttribute('data-bs-slide-to', i);
+      if (i === 0) { btn.classList.add('active'); btn.setAttribute('aria-current', 'true'); }
+      dotsWrap.appendChild(btn);
+    });
+
+    carousel.addEventListener('slid.bs.carousel', e => {
+      document.getElementById('imgCurrent').textContent = e.to + 1;
+    });
+
+    // ── jQuery Validation ────────────────────────
+    $(document).ready(function () {
+
+      $("#contactOwnerForm").validate({
+        rules: {
+          message: {
+            required: true,
+            minlength: 10,
+            maxlength: 500
+          }
+        },
+        messages: {
+          message: {
+            required:  "Please enter your message before sending.",
+            minlength: "Your message must be at least 10 characters long.",
+            maxlength: "Your message cannot exceed 500 characters."
+          }
+        },
+        errorElement: "label",
+        errorClass: "error",
+        validClass: "valid",
+        highlight: function (element) {
+          $(element).removeClass("valid").addClass("error");
+        },
+        unhighlight: function (element) {
+          var val = $(element).val();
+          if (val && val.trim() !== "") {
+            $(element).removeClass("error").addClass("valid");
+          } else {
+            $(element).removeClass("error").removeClass("valid");
+          }
+        },
+        submitHandler: function (form) {
+          form.submit();
+        }
+      });
+
+      // Blur fields on submit click so focus border never overrides validation styles
+      $(".btn-send").on("click", function () {
+        $("#contactOwnerForm textarea").blur();
+      });
+
+    });
+  </script>
+
+</body>
 </html>
-    

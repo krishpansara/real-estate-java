@@ -7,14 +7,16 @@
 <meta charset="UTF-8">
 <title>About Us</title>
 
-<link rel="stylesheet"
-href="${pageContext.request.contextPath}/assests/css/about_style.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet"
-href="${pageContext.request.contextPath}/assests/css/header_style.css">
-
-<link rel="stylesheet"
-href="${pageContext.request.contextPath}/assests/css/footer_style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/about_style.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header_style.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer_style.css"> 
 
 </head>
 
@@ -32,7 +34,7 @@ href="${pageContext.request.contextPath}/assests/css/footer_style.css">
 
     <!-- LEFT IMAGE -->
     <div class="about-image">
-        <img src="${pageContext.request.contextPath}/assests/images/about_img.jpg" alt="Team">
+        <img src="${pageContext.request.contextPath}/assets/images/about_img.jpg" alt="Team">
         <div class="dots"></div>
     </div>
 
