@@ -1,7 +1,9 @@
 package com.team.realestate.model;
 
-public class Property {
+import java.time.LocalDateTime;
 
+public class Property {
+	private int proprtyId;
     private String title;
     private String description;
     private String purpose;
@@ -18,6 +20,15 @@ public class Property {
     private String city;
     private String locality;
     private String googleMapUrl;
+    private String status;
+    private LocalDateTime createdAt;
+    
+    public int getProprtyId() {
+		return proprtyId;
+	}
+	public void setProprtyId(int proprtyId) {
+		this.proprtyId = proprtyId;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -114,7 +125,16 @@ public class Property {
 	public void setGoogleMapUrl(String googleMapUrl) {
 		this.googleMapUrl = googleMapUrl;
 	}
-
-    // Getters & Setters
-    // (Generate from Eclipse)
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	 public LocalDateTime getCreatedAt() {
+			return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
 }
