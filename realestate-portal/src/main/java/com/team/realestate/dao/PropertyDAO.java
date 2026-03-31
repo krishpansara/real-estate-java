@@ -7,8 +7,6 @@ import com.team.realestate.db.DBConnection;
 import com.team.realestate.model.Property;
 
 public class PropertyDAO {
-
-    private Connection con;
     
     public List<Property> getRecentProperties(){
     	List<Property> property_list = new ArrayList<>();
@@ -48,7 +46,7 @@ public class PropertyDAO {
     		
     		while( rs.next() ) {
 				Property p = new Property();
-				p.setProprtyId(rs.getInt("property_id"));
+				p.setPropertyId(rs.getInt("property_id"));
 				p.setTitle(rs.getString("title"));
 				p.setPurpose(rs.getString("purpose"));
 				p.setPropertyType(rs.getString("property_type"));
@@ -66,26 +64,12 @@ public class PropertyDAO {
     	return property_list;
     }
 
-//    public PropertyDAO() {
-//        try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//
-//            con = DriverManager.getConnection(
-//                "jdbc:mysql://localhost:3306/real_estate_db",
-//                "root",
-//                ""
-//            );
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     // INSERT PROPERTY
-    public int insertProperty(Property p) {
+    public int insertProperty(Property p, int userId) {
 
         int id = 0;
         try {
+            Connection con = DBConnection.getConnection();
             String sql = "INSERT INTO properties " +
                 "(user_id,title,description,purpose,property_type,price," +
                 "bedrooms,bathrooms,area_size,property_age,furnishing," +
@@ -124,6 +108,7 @@ public class PropertyDAO {
     // ✅ Unchanged
     public void insertImages(int propertyId, List<String> images) {
         try {
+            Connection con = DBConnection.getConnection();
             String sql = "INSERT INTO property_images(property_id,image_url) VALUES (?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
             for (String img : images) {
@@ -141,6 +126,7 @@ public class PropertyDAO {
     public Property getPropertyById(int propertyId) {
         Property p = null;
         try {
+            Connection con = DBConnection.getConnection();
             String sql = "SELECT pr.*, " +
                          "u.first_name, u.last_name, u.email AS owner_email, u.phone " +
                          "FROM properties pr " +
@@ -187,6 +173,7 @@ public class PropertyDAO {
     public List<String> getImagesByPropertyId(int propertyId) {
         List<String> images = new ArrayList<>();
         try {
+            Connection con = DBConnection.getConnection();
             String sql = "SELECT image_url FROM property_images WHERE property_id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, propertyId);

@@ -51,7 +51,7 @@
       <tbody>
       <c:forEach var="p" items="${ propertiesList }">
       	<tr>
-      		<td>${p.proprtyId}</td>
+      		<td>${p.propertyId}</td>
       		<td>${p.title}</td>
       		<td>${p.city}</td>
       		<td>${p.propertyType}</td>
