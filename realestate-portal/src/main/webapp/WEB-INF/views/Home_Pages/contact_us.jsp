@@ -59,9 +59,23 @@
 </head>
 
 <body>
-
-    <!-- Header -->
-    <jsp:include page="/WEB-INF/views/component/header.jsp" />
+		<%-- Place this right after <body> tag --%>
+			<%
+			    String status = (String) request.getAttribute("status");
+			    if ("success".equals(status)) {
+			%>
+			    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+			        ✅ Your message has been sent! We'll get back to you soon.
+			        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			    </div>
+			<% } else if ("error".equals(status)) { %>
+			    <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+			        ❌ Something went wrong. Please try again.
+			        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			    </div>
+			<% } %>
+   <!-- Header -->
+   <jsp:include page="/WEB-INF/views/component/header.jsp" />
 
     <!-- Page Header -->
     <div class="page-header">
@@ -111,25 +125,10 @@
                     <h2 class="section-title">Send us a Message</h2>
                     <p class="section-subtitle">Fill out the form below and we'll get in touch with you shortly</p>
 
-                    <%-- ✅ Success / Error Alert --%>
-                    <%
-                        String status = request.getParameter("status");
-                    %>
-                    <% if ("success".equals(status)) { %>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ✅ Your message has been sent! We'll get back to you within 24 hours.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    <% } else if ("error".equals(status)) { %>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            ❌ Something went wrong. Please try again.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    <% } %>
-
-                    <%-- ✅ form action and method added --%>
-                    <form id="contactForm" action="${pageContext.request.contextPath}/contact" method="post" novalidate>
-
+                    <form id="contactForm"
+					      action="${pageContext.request.contextPath}/contact"
+					      method="post"
+					      novalidate>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label">First Name <span class="required">*</span></label>

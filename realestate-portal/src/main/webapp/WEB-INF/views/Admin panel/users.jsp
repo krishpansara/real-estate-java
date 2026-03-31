@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,6 +50,7 @@
  -->
   </div>
   <div class="card">
+  
     <table>
       <thead>
         <tr>
@@ -59,109 +61,27 @@
           <th>Role</th>
           <th>City</th>
           <th>Joined</th>
-          <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
 
       <tbody>
 
-        <!-- User 1 -->
+        <c:forEach var="user" items="${userList}">
         <tr>
-          <td>1</td>
-          <td><strong>Rohan Mehta</strong></td>
-          <td>rohan@email.com</td>
-          <td>9876543210</td>
-          <td>Admin</td>
-          <td>Rajkot</td>
-          <td>18 Feb 2026</td>
-          <td><span class="badge badge-green">Active</span></td>
+          <td>${user.userId}</td>
+          <td><strong>${empty user.firstName ? "-" : user.firstName} ${empty user.lastName ? "-" : user.lastName} </strong></td>
+          <td>${empty user.email ? "-" : user.email}</td>
+          <td>${empty user.phone ? "-" : user.phone}</td>
+          <td>${empty user.role ? "-" : user.role}</td>
+          <td>${empty user.city ? "-" : user.city}</td>
+          <td>${empty user.createdAt ? "-" : user.createdAt}</td>
           <td>
             <button class="btn btn-edit">Edit</button>
             <button class="btn btn-delete">Delete</button>
           </td>
         </tr>
-
-        <!-- User 2 -->
-        <tr>
-          <td>2</td>
-          <td><strong>Priya Sharma</strong></td>
-          <td>priya@email.com</td>
-          <td>9123456789</td>
-          <td>User</td>
-          <td>Ahmedabad</td>
-          <td>17 Feb 2026</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <!-- User 3 -->
-        <tr>
-          <td>3</td>
-          <td><strong>Amit Patel</strong></td>
-          <td>amit@email.com</td>
-          <td>9988776655</td>
-          <td>User</td>
-          <td>Surat</td>
-          <td>15 Feb 2026</td>
-          <td><span class="badge badge-orange">Inactive</span></td>
-          <td>
-            <button class="btn btn-edit">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <!-- User 4 -->
-        <tr>
-          <td>4</td>
-          <td><strong>Neha Joshi</strong></td>
-          <td>neha@email.com</td>
-          <td>9654321087</td>
-          <td>User</td>
-          <td>Vadodara</td>
-          <td>14 Feb 2026</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <!-- User 5 -->
-        <tr>
-          <td>5</td>
-          <td><strong>Karan Singhvi</strong></td>
-          <td>karan@email.com</td>
-          <td>9001122334</td>
-          <td>User</td>
-          <td>Rajkot</td>
-          <td>12 Feb 2026</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <!-- User 6 -->
-        <tr>
-          <td>6</td>
-          <td><strong>Meena Trivedi</strong></td>
-          <td>meena@email.com</td>
-          <td>9811223344</td>
-          <td>User</td>
-          <td>Jamnagar</td>
-          <td>10 Feb 2026</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-          
-        </tr>
+        </c:forEach>
 
       </tbody>
     </table>

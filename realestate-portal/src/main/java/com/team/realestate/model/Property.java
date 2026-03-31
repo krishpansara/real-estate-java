@@ -1,6 +1,7 @@
 package com.team.realestate.model;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 public class Property {
 
@@ -24,14 +25,18 @@ public class Property {
     private String googleMapUrl;
     private String status;
 
-    // Owner info (joined from users table)
+    // ✅ From saniya
     private String ownerFirstName;
     private String ownerLastName;
     private String ownerEmail;
     private String ownerPhone;
 
-    // Images
     private List<String> images;
+
+    // ✅ From tmp
+    private LocalDateTime createdAt;
+
+    // ===== Getters & Setters =====
 
     public int getPropertyId() { return propertyId; }
     public void setPropertyId(int propertyId) { this.propertyId = propertyId; }
@@ -104,4 +109,7 @@ public class Property {
 
     public List<String> getImages() { return images; }
     public void setImages(List<String> images) { this.images = images; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

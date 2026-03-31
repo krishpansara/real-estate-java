@@ -1,15 +1,24 @@
 package com.team.realestate.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.team.realestate.dao.AdminDAO;
+import com.team.realestate.dao.PropertyDAO;
+import com.team.realestate.dao.UserDAO;
+import com.team.realestate.model.Property;
+import com.team.realestate.model.User;
 
 @Controller
 public class PageController {
     
     // Add this method for root path
 	@GetMapping("/page")
-	public String page(@RequestParam("name") String name) {
+	public String page(@RequestParam("name") String name, Model model) {
 
 	    if ("home".equals(name)) {
 	        return "Home_Pages/home";
@@ -51,12 +60,31 @@ public class PageController {
 	        return "auth/forgot_password";
 	    }
 	    else if ("properties".equals(name)) {
+	    	PropertyDAO propertyDao = new PropertyDAO();
+	    	List<Property> propertiesList = propertyDao.getAllAdminProperties();
+	    	model.addAttribute("propertiesList", propertiesList);
 	        return "Admin panel/properties";
 	    }
 	    else if ("users".equals(name)) {
+	        UserDAO userDAO = new UserDAO();
+	        List<User> userList = userDAO.getAllUsers();
+	        model.addAttribute("userList", userList);
 	        return "Admin panel/users";
 	    }
 	    else if ("dashboard".equals(name)) {
+	    	AdminDAO adminDAO = new AdminDAO();
+	    	PropertyDAO propertyDao = new PropertyDAO();
+	    	UserDAO userDAO = new UserDAO();
+	    	
+    	 	AdminDAO.DashboardStats stats = adminDAO.getDashboardStats();
+    	 	
+    	 	List<Property> recentProperties = propertyDao.getRecentProperties();
+    	 	List<User> recentUsers = userDAO.getRecentUser();
+    	 	
+	        model.addAttribute("recentUsers", recentUsers);
+	        model.addAttribute("recentProperties", recentProperties);
+	        model.addAttribute("stats", stats);
+	        
 	        return "Admin panel/dashboard";
 	    }
 	    else if ("home_auth".equals(name)) {

@@ -1,49 +1,156 @@
 package com.team.realestate.model;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+
 public class User {
-		private int user_id;
-		private String first_name;
-	    private String last_name;
-	    private String email;
-	    private String password_hash;
-	    
-	    public int getId() {
-	    	return user_id;
-	    }
-	    
-	    public void setId(int user_id) {
-	    	this.user_id = user_id;
-	    }
 
-	    public String getFirstName() {
-	        return first_name;
-	    }
+    private int userId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String passwordHash;
+    private LocalDateTime createdAt;
+    private String role = "User";
+    private String phone;
+    private Date dateOfBirth;
+    private String gender;
+    private String streetAddress;
+    private String city;
+    private String state;
+    private String zipCode;
+    private String country;
+    private String profilePicture;
 
-	    public void setFirstName(String first_name) {
-	        this.first_name = first_name;
-	    }
+    public int getUserId() {
+        return userId;
+    }
 
-	    public String getLastName() {
-	        return last_name;
-	    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	    public void setLastName(String last_name) {
-	        this.last_name = last_name;
-	    }
+    public String getFirstName() {
+        return firstName;
+    }
 
-	    public String getEmail() {
-	        return email;
-	    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	    public void setEmail(String email) {
-	        this.email = email;
-	    }
+    public String getLastName() {
+        return lastName;
+    }
 
-	    public String getPasswordHash() {
-	        return password_hash;
-	    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	    public void setPasswordHash(String password_hash) {
-	        this.password_hash = password_hash;
-	    }
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }
