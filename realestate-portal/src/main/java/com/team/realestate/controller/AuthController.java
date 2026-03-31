@@ -98,7 +98,7 @@ public class AuthController {
 			HttpSession session = request.getSession(true);
 			
 			// Store session data
-            session.setAttribute("userId", user.getId());
+            session.setAttribute("userId", user.getUserId());
             session.setAttribute("userName", user.getFirstName() + " " + user.getLastName());
             session.setAttribute("userEmail", user.getEmail());
             
