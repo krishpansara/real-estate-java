@@ -1,52 +1,53 @@
 package com.team.realestate.controller;
 
-import com.team.realestate.dao.ContactMessageDAO;
-import com.team.realestate.model.ContactMessage;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.team.realestate.dao.ContactDAO;
+import com.team.realestate.model.ContactMessage;
+import com.team.realestate.service.ContactEmailService;
 
 @Controller
 public class ContactController {
 
-    private final ContactMessageDAO dao = new ContactMessageDAO();
+    @Autowired
+    private ContactEmailService contactEmailService;
 
     @PostMapping("/contact")
-    public String handleContact(HttpServletRequest request,
-                                RedirectAttributes redirectAttributes) {
+    public String handleContact(
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName")  String lastName,
+            @RequestParam("email")     String email,
+            @RequestParam("phone")     String phone,
+            @RequestParam("subject")   String subject,
+            @RequestParam("message")   String message) {
 
-        String firstName = request.getParameter("firstName");
-        String lastName  = request.getParameter("lastName");
-        String email     = request.getParameter("email");
-        String phone     = request.getParameter("phone");
-        String subject   = request.getParameter("subject");
-        String message   = request.getParameter("message");
-
-        // Server-side validation
         if (firstName == null || firstName.trim().isEmpty() ||
-            email     == null || email.trim().isEmpty()) {
-
-            redirectAttributes.addFlashAttribute("status", "error");
-            return "redirect:/page?name=contact_us"; // ← matches your PageController
+            email     == null || email.trim().isEmpty()     ||
+            message   == null || message.trim().isEmpty()) {
+            return "redirect:/page?name=contact_us&status=error";
         }
 
-        // Build model
-        ContactMessage cm = new ContactMessage();
-        cm.setFirstName(firstName.trim());
-        cm.setLastName(lastName.trim());
-        cm.setEmail(email.trim());
-        cm.setPhone(phone.trim());
-        cm.setSubject(subject.trim());
-        cm.setMessage(message.trim());
+        // 1. Save to DB
+        ContactMessage contactMsg = new ContactMessage();
+        contactMsg.setFirstName(firstName.trim());
+        contactMsg.setLastName(lastName.trim());
+        contactMsg.setEmail(email.trim());
+        contactMsg.setPhone(phone.trim());
+        contactMsg.setSubject(subject.trim());
+        contactMsg.setMessage(message.trim());
 
-        // Save to DB
-        boolean saved = dao.save(cm);
+        ContactDAO dao = new ContactDAO();
+        boolean saved = dao.saveMessage(contactMsg);
+        System.out.println("✅ Contact form saved: " + saved);
 
-        redirectAttributes.addFlashAttribute("status", saved ? "success" : "error");
+        // 2. Send emails
+        contactEmailService.sendConfirmationToUser(email, firstName);
+        contactEmailService.sendNotificationToAdmin(
+                firstName, lastName, email, phone, subject, message);
 
-        return "redirect:/page?name=contact_us"; // ← Spring resolves this via PageController
+        return "redirect:/page?name=contact_us&status=success";
     }
 }
