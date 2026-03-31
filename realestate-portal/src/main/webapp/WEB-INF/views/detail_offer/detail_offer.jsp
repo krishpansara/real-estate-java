@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome (FIXED) -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Project CSS -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header_style.css">
@@ -36,7 +36,6 @@
       font-size: 15px;
     }
 
-    /* ── Page heading + back ──────────────── */
     .page-head {
       display: flex; align-items: center; gap: 14px;
       margin-bottom: 28px;
@@ -54,7 +53,6 @@
     .page-head h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .page-head p  { font-size: 13px; color: var(--muted); margin: 0; }
 
-    /* ── Carousel ─────────────────────────── */
     .prop-carousel { border-radius: 16px; overflow: hidden; position: relative; }
     .prop-carousel .carousel-item img {
       width: 100%; height: 400px;
@@ -93,7 +91,6 @@
       z-index: 10; pointer-events: none;
     }
 
-    /* ── Wishlist heart ───────────────────── */
     .wishlist-btn {
       position: absolute; top: 14px; right: 14px;
       width: 44px; height: 44px; border-radius: 50%;
@@ -108,7 +105,6 @@
     .wishlist-btn.wishlisted { background: #fff5f5; }
     .wishlist-btn.wishlisted i { color: #ff6b6b; transform: scale(1.15); }
 
-    /* ── Pills ────────────────────────────── */
     .pill {
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 11px; font-weight: 600;
@@ -118,11 +114,9 @@
     .pill-rent   { background: rgba(29,209,161,.12); color: var(--primary-dark); }
     .pill-active { background: rgba(29,209,161,.12); color: var(--primary-dark); }
 
-    /* ── Price ────────────────────────────── */
     .price-tag { font-size: 2rem; font-weight: 700; color: var(--primary-dark); line-height: 1; }
     .price-tag small { font-size: .9rem; font-weight: 400; color: var(--muted); }
 
-    /* ── Stat chips ───────────────────────── */
     .stat-chip {
       background: var(--card); border-radius: 12px; padding: 14px 16px;
       display: flex; align-items: center; gap: 12px;
@@ -138,12 +132,10 @@
     .stat-chip .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
     .stat-chip .val { font-weight: 600; font-size: 14px; margin-top: 1px; }
 
-    /* ── Section card ─────────────────────── */
     .scard { background: var(--card); border-radius: 15px; padding: 24px; box-shadow: 0 5px 20px rgba(0,0,0,.06); }
     .scard-title { font-size: .95rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
     .scard-title i { color: var(--primary); }
 
-    /* ── Feature tags ─────────────────────── */
     .ftag {
       display: inline-flex; align-items: center; gap: 6px;
       background: rgba(29,209,161,.08);
@@ -152,13 +144,10 @@
     }
     .ftag i { color: var(--primary-dark); font-size: .85rem; }
 
-    /* ── Map ──────────────────────────────── */
     .map-frame { width: 100%; height: 260px; border: 0; border-radius: 12px; display: block; }
 
-    /* ── Owner avatar ─────────────────────── */
     .owner-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(29,209,161,.3); }
 
-    /* ── Send button ──────────────────────── */
     .btn-send {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: #fff; border: none; border-radius: 10px;
@@ -169,7 +158,6 @@
     }
     .btn-send:hover { opacity: .9; transform: translateY(-1px); }
 
-    /* ── Form ─────────────────────────────── */
     .form-control {
       border-radius: 10px !important;
       border: 1.5px solid #e9ecef !important;
@@ -184,10 +172,34 @@
     textarea.form-control { resize: none; }
     .form-label { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
 
-    /* ── Sticky sidebar ───────────────────── */
+    /* jQuery Validation error styles */
+    label.error {
+      color: #dc3545;
+      font-size: 0.78rem;
+      margin-top: 5px;
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+    }
+    textarea.error {
+      border-color: #dc3545 !important;
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.12) !important;
+    }
+    textarea.valid {
+      border-color: #198754 !important;
+      box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.12) !important;
+    }
+    textarea.error:focus {
+      border-color: #dc3545 !important;
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.12) !important;
+    }
+    textarea.valid:focus {
+      border-color: #198754 !important;
+      box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.12) !important;
+    }
+
     @media (min-width: 992px) { .sticky-side { position: sticky; top: 24px; } }
 
-    /* ── Animations ───────────────────────── */
     @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     .fu  { animation: fadeUp .5s ease both; }
     .fu1 { animation-delay: .05s; }
@@ -200,12 +212,10 @@
 </head>
 <body>
 
-  <%-- ═══════════ HEADER ═══════════ --%>
   <jsp:include page="/WEB-INF/views/component/header.jsp" />
 
   <div class="container py-4" style="max-width:1160px">
 
-    <%-- Page Heading + Back --%>
     <div class="page-head fu fu1">
       <button class="back-btn" onclick="history.back()" title="Go Back">
         <i class="fas fa-arrow-left"></i>
@@ -218,18 +228,12 @@
 
     <div class="row g-4 align-items-start">
 
-      <%-- ═══ LEFT COLUMN ═══ --%>
+      <%-- LEFT COLUMN --%>
       <div class="col-lg-8">
 
-        <%-- Image Carousel + Wishlist Heart --%>
         <div class="prop-carousel mb-4 fu fu1">
-
           <div id="imgCarousel" class="carousel slide" data-bs-ride="false">
-
-            <%-- Dot indicators — built dynamically by JS --%>
             <div class="carousel-indicators" id="carouselDots"></div>
-
-            <%-- Slides --%>
             <div class="carousel-inner" id="carouselSlides">
               <div class="carousel-item active">
                 <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1000&q=85" alt="Photo 1">
@@ -241,8 +245,6 @@
                 <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?w=1000&q=80" alt="Photo 3">
               </div>
             </div>
-
-            <%-- Prev / Next arrows --%>
             <button class="carousel-control-prev" type="button" data-bs-target="#imgCarousel" data-bs-slide="prev">
               <span class="carousel-control-prev-icon"></span>
             </button>
@@ -250,20 +252,15 @@
               <span class="carousel-control-next-icon"></span>
             </button>
           </div>
-
-          <%-- Image counter badge --%>
           <div class="img-counter">
             <i class="fas fa-images me-1"></i>
             <span id="imgCurrent">1</span> / <span id="imgTotal"></span>
           </div>
-
-          <%-- Wishlist heart --%>
           <button class="wishlist-btn" id="wishlistBtn" onclick="toggleWishlist()" title="Save to Wishlist">
             <i class="far fa-heart" id="heartIcon"></i>
           </button>
         </div>
 
-        <%-- Title + Price --%>
         <div class="fu fu2 mb-4">
           <div class="d-flex gap-2 mb-2">
             <span class="pill pill-rent"><i class="fas fa-tag"></i> Rent</span>
@@ -276,7 +273,6 @@
           <div class="price-tag">&#8377; 15,000 <small>/ month</small></div>
         </div>
 
-        <%-- Stat Chips --%>
         <div class="row g-3 mb-4 fu fu2">
           <div class="col-6 col-sm-3">
             <div class="stat-chip">
@@ -304,7 +300,6 @@
           </div>
         </div>
 
-        <%-- Property Details Card --%>
         <div class="scard mb-4 fu fu3">
           <div class="scard-title"><i class="fas fa-info-circle"></i> Property Details</div>
           <div class="d-flex flex-wrap gap-2 mb-4">
@@ -314,9 +309,7 @@
             <span class="ftag"><i class="fas fa-calendar-check"></i> Immediate</span>
             <span class="ftag"><i class="fas fa-comments"></i> Negotiable</span>
           </div>
-
           <hr>
-
           <div class="scard-title mt-3"><i class="fas fa-align-left"></i> Description</div>
           <p style="color:var(--muted);line-height:1.8;font-size:14px">
             Well-maintained 2 BHK flat located in a prime residential area
@@ -324,7 +317,6 @@
           </p>
         </div>
 
-        <%-- Map --%>
         <div class="scard fu fu4">
           <div class="scard-title"><i class="fas fa-map-marked-alt"></i> Location</div>
           <iframe class="map-frame"
@@ -333,15 +325,13 @@
         </div>
 
       </div>
-      <%-- end left col --%>
 
-      <%-- ═══ RIGHT SIDEBAR ═══ --%>
+      <%-- RIGHT SIDEBAR --%>
       <div class="col-lg-4">
         <div class="sticky-side">
           <div class="scard fu fu2">
             <div class="scard-title"><i class="fas fa-user-circle"></i> Contact Owner</div>
 
-            <%-- Owner info --%>
             <div class="d-flex align-items-center gap-3 mb-4 p-3"
                  style="background:rgba(29,209,161,.05);border-radius:12px;border:1px solid rgba(29,209,161,.15)">
               <img src="https://i.pravatar.cc/150?img=12" class="owner-avatar" alt="Rahul Sharma">
@@ -356,32 +346,35 @@
               </div>
             </div>
 
-            <%-- Contact form --%>
-            <form action="${pageContext.request.contextPath}/message/send" method="post">
+            <%-- novalidate removes HTML5 validation, required attribute removed from textarea --%>
+            <form id="contactOwnerForm" action="${pageContext.request.contextPath}/message/send" method="post" novalidate>
               <div class="mb-3">
                 <label class="form-label">
                   <i class="fas fa-comment-dots me-1" style="color:var(--primary)"></i>Your Message
                 </label>
                 <textarea class="form-control" name="message" rows="4"
-                          placeholder="Write your message here..." required></textarea>
+                          placeholder="Write your message here..."></textarea>
               </div>
               <button type="submit" class="btn-send">
                 <i class="fas fa-paper-plane"></i> Send Message
               </button>
             </form>
+
           </div>
         </div>
       </div>
-      <%-- end right sidebar --%>
 
     </div>
   </div>
 
-  <%-- ═══════════ FOOTER ═══════════ --%>
   <jsp:include page="/WEB-INF/views/component/footer.jsp" />
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <!-- jQuery Validation Plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
   <script>
     // ── Wishlist toggle ──────────────────────────
@@ -401,7 +394,6 @@
 
     document.getElementById('imgTotal').textContent = total;
 
-    // Build dot indicators dynamically (works for any number of images)
     const dotsWrap = document.getElementById('carouselDots');
     slides.forEach((_, i) => {
       const btn = document.createElement('button');
@@ -412,9 +404,52 @@
       dotsWrap.appendChild(btn);
     });
 
-    // Update "1 / N" counter on every slide change
     carousel.addEventListener('slid.bs.carousel', e => {
       document.getElementById('imgCurrent').textContent = e.to + 1;
+    });
+
+    // ── jQuery Validation ────────────────────────
+    $(document).ready(function () {
+
+      $("#contactOwnerForm").validate({
+        rules: {
+          message: {
+            required: true,
+            minlength: 10,
+            maxlength: 500
+          }
+        },
+        messages: {
+          message: {
+            required:  "Please enter your message before sending.",
+            minlength: "Your message must be at least 10 characters long.",
+            maxlength: "Your message cannot exceed 500 characters."
+          }
+        },
+        errorElement: "label",
+        errorClass: "error",
+        validClass: "valid",
+        highlight: function (element) {
+          $(element).removeClass("valid").addClass("error");
+        },
+        unhighlight: function (element) {
+          var val = $(element).val();
+          if (val && val.trim() !== "") {
+            $(element).removeClass("error").addClass("valid");
+          } else {
+            $(element).removeClass("error").removeClass("valid");
+          }
+        },
+        submitHandler: function (form) {
+          form.submit();
+        }
+      });
+
+      // Blur fields on submit click so focus border never overrides validation styles
+      $(".btn-send").on("click", function () {
+        $("#contactOwnerForm textarea").blur();
+      });
+
     });
   </script>
 
