@@ -1,16 +1,18 @@
 package com.team.realestate.controller;
 
+import java.lang.reflect.Array;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.team.realestate.dao.ContactDAO;
 import com.team.realestate.model.ContactMessage;
 import com.team.realestate.service.ContactEmailService;
 
 @Controller
 public class ContactController {
+	
 
     @Autowired
     private ContactEmailService contactEmailService;

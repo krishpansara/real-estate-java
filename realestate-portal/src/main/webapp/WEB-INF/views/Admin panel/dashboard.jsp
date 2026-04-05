@@ -34,19 +34,8 @@
 <body>
 
 <!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="sidebar-logo">Real<span>Estate</span></div>
-  <a class="nav-item  active" href="${pageContext.request.contextPath}/page?name=dashboard">
-  	 Dashboard
-  </a>
-  <a class="nav-item" href="${pageContext.request.contextPath}/page?name=users">
-     Users
-  </a>
-  <a class="nav-item" href="${pageContext.request.contextPath}/page?name=properties">
-     Properties
-  </a>
-</div>
-
+   <jsp:include page="/WEB-INF/views/Admin panel/componant/sidebar.jsp" />
+   
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">

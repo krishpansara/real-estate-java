@@ -15,9 +15,6 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/property")
 public class PropertyController {
 
-    public PropertyController() {
-        System.out.println("🔥 PropertyController Loaded");
-    }
 
     @PostMapping("/add")
     public String addProperty(

@@ -45,32 +45,48 @@
           <th>Name</th>
           <th>Email</th>
           <th>Phone</th>
-          <th>Role</th>
-          <th>City</th>
-          <th>Joined</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Submitted At</th>
           <th>Actions</th>
         </tr>
       </thead>
 
       <tbody>
 
-        <c:forEach var="user" items="${userList}">
-        <tr>
-          <td>${user.userId}</td>
-          <td><strong>${empty user.firstName ? "-" : user.firstName} ${empty user.lastName ? "-" : user.lastName} </strong></td>
-          <td>${empty user.email ? "-" : user.email}</td>
-          <td>${empty user.phone ? "-" : user.phone}</td>
-          <td>${empty user.role ? "-" : user.role}</td>
-          <td>${empty user.city ? "-" : user.city}</td>
-          <td>${empty user.createdAt ? "-" : user.createdAt}</td>
-          <td>
-            <button class="btn btn-edit">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-        </c:forEach>
+        <c:forEach var="cm" items="${allContactMessages}">
+		  <tr>
+		    <td>${cm.id}</td>
+		    
+		    <td>
+		      <strong>
+		        ${empty cm.firstName ? "-" : cm.firstName}
+		        ${empty cm.lastName ? "-" : cm.lastName}
+		      </strong>
+		    </td>
+		    
+		    <td>${empty cm.email ? "-" : cm.email}</td>
+		    <td>${empty cm.phone ? "-" : cm.phone}</td>
+		    
+		    <td>${empty cm.subject ? "-" : cm.subject}</td>
+		    
+		    <td>
+		      ${empty cm.message ? "-" : cm.message}
+		    </td>
+		    
+		    <td>
+		      ${empty cm.submittedAt ? "-" : cm.submittedAt}
+		    </td>
+		    
+		    <td>
+		      <button class="btn btn-edit">Edit</button>
+		      <button class="btn btn-delete">Delete</button>
+		    </td>
+		  </tr>
+		</c:forEach>
 
       </tbody>
+
     </table>
   </div>
   <!-- ADD / EDIT USER MODAL -->
@@ -128,48 +144,5 @@
 
 </div>
 
-<script>
-function openAddModal() {
-  document.getElementById('modal-title').textContent = 'Add New User';
-  document.getElementById('edit-id').value = '';
-  ['u-name','u-email','u-phone','u-city'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('u-role').value   = 'User';
-  document.getElementById('u-status').value = 'Active';
-  document.getElementById('user-modal').classList.add('open');
-}
-
-
-function closeModal() {
-  document.getElementById('user-modal').classList.remove('open');
-}
-
-function saveUser() {
-  const name = document.getElementById('u-name').value.trim();
-  const email = document.getElementById('u-email').value.trim();
-  if (!name || !email) { alert('Name and Email are required.'); return; }
-
-  const id = document.getElementById('edit-id').value;
-  const user = {
-    id:      id ? parseInt(id) : nextId++,
-    name,
-    email,
-    phone:   document.getElementById('u-phone').value.trim(),
-    role:    document.getElementById('u-role').value,
-    city:    document.getElementById('u-city').value.trim(),
-    joined:  id ? users.find(u => u.id === parseInt(id)).joined : today(),
-    status:  document.getElementById('u-status').value,
-  };
-
-  if (id) {
-    const idx = users.findIndex(u => u.id === parseInt(id));
-    users[idx] = user;
-  } else {
-    users.push(user);
-  }
-  closeModal();
-  filterUsers();
-}
-
-</script>
 </body>
 </html>

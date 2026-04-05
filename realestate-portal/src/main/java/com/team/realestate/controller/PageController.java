@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.team.realestate.dao.AdminDAO;
+import com.team.realestate.dao.ContactMessageDAO;
 import com.team.realestate.dao.PropertyDAO;
 import com.team.realestate.dao.UserDAO;
+import com.team.realestate.model.ContactMessage;
 import com.team.realestate.model.Property;
 import com.team.realestate.model.User;
 
@@ -70,6 +72,12 @@ public class PageController {
 	        List<User> userList = userDAO.getAllUsers();
 	        model.addAttribute("userList", userList);
 	        return "Admin panel/users";
+	    }
+	    else if ("contact".equals(name)) {
+	    	ContactMessageDAO cmd = new ContactMessageDAO();
+	    	List<ContactMessage> allContactMessages = cmd.getAllContactMessages();
+	    	model.addAttribute("allContactMessages", allContactMessages);
+	      return "Admin panel/contact_message";
 	    }
 	    else if ("dashboard".equals(name)) {
 	    	AdminDAO adminDAO = new AdminDAO();

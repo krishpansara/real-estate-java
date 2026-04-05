@@ -1,5 +1,7 @@
 package com.team.realestate.model;
 
+import java.time.LocalDateTime;
+
 public class ContactMessage {
 
     private int    id;
@@ -9,6 +11,7 @@ public class ContactMessage {
     private String phone;
     private String subject;
     private String message;
+    private LocalDateTime submittedAt;
 
     // Getters and Setters
     public int getId() { return id; }
@@ -31,4 +34,8 @@ public class ContactMessage {
 
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
+    
+
+    public LocalDateTime getSubmittedAt() { return submittedAt; }
+    public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
 }
