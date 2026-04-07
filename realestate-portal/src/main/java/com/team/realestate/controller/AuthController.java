@@ -2,6 +2,7 @@ package com.team.realestate.controller;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -10,6 +11,7 @@ import com.team.realestate.model.User;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.ui.Model;
 
 @Controller
 public class AuthController {

@@ -13,6 +13,39 @@ import com.team.realestate.model.User;
 
 public class UserDAO {
 	
+	public User getUserById(int userId) {
+		User currUser = null;
+		
+		User user = null;
+		String sql = "SELECT * FROM users WHERE userId = ?";
+		
+		try {
+			
+			Connection conn = DBConnection.getConnection();
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, userId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				user = new User();
+				user.setUserId(rs.getInt("user_id"));
+				user.setFirstName(rs.getString("first_name"));
+				user.setLastName(rs.getString("last_name"));
+				user.setEmail(rs.getString("email"));
+				user.setPasswordHash(rs.getString("password_hash"));
+				
+			}
+			
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+					
+		return currUser;
+	}
+	
 	public List<User> getRecentUser(){
 		List<User> recentUsersList = new ArrayList<>();
 		String recentUsersSql = "SELECT `user_id`, `first_name`, `last_name`, `email`, `created_at` FROM `users` ORDER BY `created_at` desc LIMIT 7";

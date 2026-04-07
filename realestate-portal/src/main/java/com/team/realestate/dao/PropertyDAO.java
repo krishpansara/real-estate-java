@@ -7,6 +7,69 @@ import com.team.realestate.db.DBConnection;
 import com.team.realestate.model.Property;
 
 public class PropertyDAO {
+	public List<Property> getAllPropertiesForCard(){
+		List<Property> propertiesForCard = new ArrayList<>();
+		
+		String allPropertiesForCard = 
+			    "SELECT p.property_id, p.title, p.purpose, p.property_type, p.price, p.bedrooms, p.city, p.locality, p.created_at, " +
+			    "(SELECT image_url FROM property_images WHERE property_id = p.property_id LIMIT 1) AS image_url " +
+			    "FROM properties p WHERE p.status = 'active'";
+		
+		try {
+    		Connection con = DBConnection.getConnection();
+    		PreparedStatement ps = con.prepareStatement(allPropertiesForCard);
+    		ResultSet rs = ps.executeQuery();
+    		
+    		while(rs.next()) {
+			 Property p = new Property();
+
+			    p.setPropertyId(rs.getInt("property_id"));
+			    p.setTitle(rs.getString("title"));
+			    p.setPurpose(rs.getString("purpose"));
+			    p.setPropertyType(rs.getString("property_type"));
+			    p.setPrice(rs.getDouble("price"));
+			    p.setBedrooms(rs.getInt("bedrooms"));
+			    p.setCity(rs.getString("city"));
+			    p.setLocality(rs.getString("locality"));
+			    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+
+			    // image from subquery or join
+			    List<String> images = new ArrayList<>();
+			    String img = rs.getString("image_url");
+			    if (img != null && !img.isEmpty()) {
+			        images.add(img);
+			    }
+			    p.setImages(images);
+
+			    propertiesForCard.add(p);
+    		}
+			
+		} catch (Exception e ) {
+            e.printStackTrace();
+    	}
+    	return propertiesForCard;
+	}
+	
+	public List<Property> getAllProperties(){
+		List<Property> properties = new ArrayList<>();
+		
+		String allProperties = "SELECT * FROM `properties`";
+		
+		try {
+    		Connection con = DBConnection.getConnection();
+    		PreparedStatement ps = con.prepareStatement(allProperties);
+    		ResultSet rs = ps.executeQuery();
+    		
+    		while(rs.next()) {
+    			
+    		}
+			
+		} catch (Exception e ) {
+            e.printStackTrace();
+    	}
+    	
+    	return properties;
+	}
     
     public List<Property> getRecentProperties(){
     	List<Property> property_list = new ArrayList<>();

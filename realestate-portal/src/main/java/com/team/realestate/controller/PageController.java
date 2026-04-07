@@ -32,8 +32,11 @@ public class PageController {
 	        return "Home_Pages/top_offers";
 	    } 
 	    else if ("explore".equals(name)) {
+	        PropertyDAO propertyDao = new PropertyDAO();
+	        List<Property> properties = propertyDao.getAllPropertiesForCard();
+	        model.addAttribute("properties", properties);
 	        return "explore/explore";
-	    } 
+	    }  
 	    else if ("about".equals(name)) {
 	        return "Home_Pages/about";
 	    } 
@@ -50,6 +53,7 @@ public class PageController {
 	        return "property_listing/property_listing";
 	    }
 	    else if ("profile".equals(name)) {
+	    
 	        return "Profile_pages/profile";
 	    }
 	    else if ("favourite".equals(name)) {

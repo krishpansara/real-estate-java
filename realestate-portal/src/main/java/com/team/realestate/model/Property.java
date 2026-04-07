@@ -25,7 +25,6 @@ public class Property {
     private String googleMapUrl;
     private String status;
 
-    // ✅ From saniya
     private String ownerFirstName;
     private String ownerLastName;
     private String ownerEmail;
@@ -33,10 +32,8 @@ public class Property {
 
     private List<String> images;
 
-    // ✅ From tmp
     private LocalDateTime createdAt;
 
-    // ===== Getters & Setters =====
 
     public int getPropertyId() { return propertyId; }
     public void setPropertyId(int propertyId) { this.propertyId = propertyId; }

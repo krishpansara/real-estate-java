@@ -43,7 +43,6 @@ public class ContactController {
 
         ContactDAO dao = new ContactDAO();
         boolean saved = dao.saveMessage(contactMsg);
-        System.out.println("✅ Contact form saved: " + saved);
 
         // 2. Send emails
         contactEmailService.sendConfirmationToUser(email, firstName);

@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header_style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer_style.css">    
     
@@ -460,6 +461,8 @@
                             👤
                         </div>
                         <div class="profile-info">
+                        <p>Name: ${user.name}</p>
+<p>Email: ${user.email}</p>
                             <h2 id="userName">John Doe</h2>
                             <p><span class="icon">✉</span> <span id="userEmail">john.doe@example.com</span></p>
                             <p><span class="icon">📞</span> <span id="userPhone">+1 234 567 8900</span></p>

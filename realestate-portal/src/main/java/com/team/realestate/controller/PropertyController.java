@@ -14,6 +14,10 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/property")
 public class PropertyController {
+	
+
+    private PropertyDAO dao = new PropertyDAO();		
+	
 
 
     @PostMapping("/add")
@@ -21,8 +25,6 @@ public class PropertyController {
             @RequestParam Map<String, String> params,
             @RequestParam("images") MultipartFile[] images,
             Model model, HttpServletRequest request) {
-
-        System.out.println("✅ addProperty method HIT");
 
         // ✅ Check login
         HttpSession session = request.getSession(false);
@@ -76,8 +78,7 @@ public class PropertyController {
             return "property_listing/property_listing";
         }
 
-        // ✅ Insert with real userId
-        PropertyDAO dao = new PropertyDAO();
+
         int propertyId = dao.insertProperty(p, userId);
         System.out.println("✅ Property inserted with ID: " + propertyId);
 
@@ -105,5 +106,15 @@ public class PropertyController {
 
         // ✅ Redirect to detail page after listing
         return "redirect:/property/detail?id=" + propertyId + "&status=listed";
+    }
+    
+    @GetMapping("/explore")
+    public String showExplorePage(Model model) {
+    	System.out.println("showExplorePage called");
+        List<Property> properties = dao.getAllProperties();
+
+        model.addAttribute("properties", properties);
+
+        return "explore";
     }
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
     /* Wrapper: positions the dropdown relative to the profile button */
     .profile-dropdown-wrapper {
@@ -143,9 +144,7 @@
 
                 <%-- Trigger button --%>
                 <button class="profile-icon" id="profileBtn" title="Profile" aria-expanded="false" aria-haspopup="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                    </svg>
+                    <i class="fa fa-user-circle"></i>
                 </button>
 
                 <%-- Dropdown menu --%>
@@ -161,34 +160,26 @@
 
                     <%-- Menu items --%>
                     <a href="${pageContext.request.contextPath}/page?name=profile" class="dropdown-item" role="menuitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="dropdown-icon">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                        </svg>
+                        <i class="fa fa-user me-2"></i>
                         My Profile
                     </a>
 
                     <a href="${pageContext.request.contextPath}/page?name=property_listing" class="dropdown-item" role="menuitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="dropdown-icon">
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                        </svg>
+                        <i class="fa fa-home me-2"></i>
                         Post / Manage Properties
                     </a>
 
                     <a href="${pageContext.request.contextPath}/page?name=favourite" class="dropdown-item" role="menuitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="dropdown-icon">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
+                        <i class="fa fa-heart me-2"></i>
                         Favorite Properties
                     </a>
 
                     <div class="dropdown-divider"></div>
-
-                    <a href="${pageContext.request.contextPath}/logout" class="dropdown-item dropdown-item-logout" role="menuitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="dropdown-icon">
-                            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
-                        </svg>
-                        Logout
-                    </a>
+                    <form method="post" action="${pageContext.request.contextPath}/logout" style="display:inline;">
+					    <button class="dropdown-item dropdown-item-logout">
+					       <i class="fa fa-sign-out-alt me-2"></i>Logout
+					    </button>
+					</form>
                 </div>
             </div>
 
