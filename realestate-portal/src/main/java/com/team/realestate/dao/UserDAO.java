@@ -166,4 +166,54 @@ public class UserDAO {
 
         return userId;
     }
+ // Add these two methods inside your existing UserDAO class
+
+    public void saveResetToken(String email, String token, Timestamp expiry) {
+        String sql = "UPDATE users SET reset_token = ?, token_expiry = ? WHERE email = ?";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, token);
+            ps.setTimestamp(2, expiry);
+            ps.setString(3, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public User getUserByResetToken(String token) {
+        User user = null;
+        String sql = "SELECT * FROM users WHERE reset_token = ? AND token_expiry > NOW()";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, token);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setPasswordHash(rs.getString("password_hash"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public void updatePasswordAndClearToken(String email, String newHashedPassword) {
+        String sql = "UPDATE users SET password_hash = ?, reset_token = NULL, token_expiry = NULL WHERE email = ?";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, newHashedPassword);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
