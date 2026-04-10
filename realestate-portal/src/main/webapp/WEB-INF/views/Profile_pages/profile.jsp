@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -461,25 +463,23 @@
                             👤
                         </div>
                         <div class="profile-info">
-                        <p>Name: ${user.name}</p>
-<p>Email: ${user.email}</p>
-                            <h2 id="userName">John Doe</h2>
-                            <p><span class="icon">✉</span> <span id="userEmail">john.doe@example.com</span></p>
-                            <p><span class="icon">📞</span> <span id="userPhone">+1 234 567 8900</span></p>
-                            <p><span class="icon">📅</span> Member since <span id="memberSince">January 2024</span></p>
+                            <h2>${user != null ? user.firstName : 'User'} ${user != null ? user.lastName : ''}</h2>
+                            <p><span class="icon">✉</span> ${user != null ? user.email : 'N/A'}</p>
+                            <p><span class="icon">📞</span> ${user != null ? user.phone : 'N/A'}</p>
+                            <p><span class="icon">📅</span> Member since ${user != null ? '2024' : 'N/A'}</p>
                         </div>
                         
                         <div class="profile-stats">
                             <div class="stat-item">
-                                <span class="number" id="totalProperties">12</span>
+                                <span class="number">${totalProperties != null ? totalProperties : 0}</span>
                                 <span class="label">Properties Listed</span>
                             </div>
                             <div class="stat-item">
-                                <span class="number" id="activeProperties">8</span>
+                                <span class="number">${activeProperties != null ? activeProperties : 0}</span>
                                 <span class="label">Active</span>
                             </div>
                             <div class="stat-item">
-                                <span class="number" id="soldProperties">4</span>
+                                <span class="number">${soldProperties != null ? soldProperties : 0}</span>
                                 <span class="label">Sold</span>
                             </div>
                         </div>
@@ -512,83 +512,57 @@
             </div>
             
             <div id="propertiesContainer" class="row">
-                <!-- Property Card 1 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600" alt="Property">
-                            <span class="property-badge">Active</span>
-                        </div>
-                        <div class="property-content">
-                            <h3 class="property-title">Large 4-room apartment with a beautiful terrace</h3>
-                            <div class="property-location">
-                                <span class="icon">📍</span>
-                                Barcelona IV
+                <c:choose>
+                    <c:when test="${not empty userProperties}">
+                        <c:forEach var="property" items="${userProperties}">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="property-card">
+                                    <div class="property-image">
+                                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600" alt="Property">
+                                        <span class="property-badge">${property.status != null ? property.status : 'active'}</span>
+                                    </div>
+                                    <div class="property-content">
+                                        <h3 class="property-title">${property.title != null ? property.title : 'Untitled Property'}</h3>
+                                        <div class="property-location">
+                                            <span class="icon">📍</span>
+                                            ${property.city != null ? property.city : 'Unknown'}, ${property.locality != null ? property.locality : 'Location'}
+                                        </div>
+                                        <div class="property-price">
+                                            ₹${property.price != null ? property.price : '0'}
+                                        </div>
+                                        <div class="property-actions">
+                                            <c:if test="${property.status != 'sold'}">
+                                                <button class="btn-action btn-edit" onclick="editProperty(${property.propertyId})">
+                                                    <span>✏</span> Edit
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${property.status == 'sold'}">
+                                                <button class="btn-action btn-edit" onclick="viewDetails(${property.propertyId})">
+                                                    <span>👁</span> View Details
+                                                </button>
+                                            </c:if>
+                                            <button class="btn-action btn-delete" onclick="deleteProperty(${property.propertyId})">
+                                                <span>🗑</span> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="property-price">320 000₹</div>
-                            <div class="property-actions">
-                                <button class="btn-action btn-edit" onclick="editProperty(1)">
-                                    <span>✏</span> Edit
-                                </button>
-                                <button class="btn-action btn-delete" onclick="deleteProperty(1)">
-                                    <span>🗑</span> Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Property Card 2 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600" alt="Property">
-                            <span class="property-badge">Active</span>
-                        </div>
-                        <div class="property-content">
-                            <h3 class="property-title">Magnificent duplex in a private villa</h3>
-                            <div class="property-location">
-                                <span class="icon">📍</span>
-                                Barcelona II
-                            </div>
-                            <div class="property-price">315 000₹</div>
-                            <div class="property-actions">
-                                <button class="btn-action btn-edit" onclick="editProperty(2)">
-                                    <span>✏</span> Edit
-                                </button>
-                                <button class="btn-action btn-delete" onclick="deleteProperty(2)">
-                                    <span>🗑</span> Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Property Card 3 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600" alt="Property">
-                            <span class="property-badge sold">Sold</span>
-                        </div>
-                        <div class="property-content">
-                            <h3 class="property-title">51 large design apartment with terrace</h3>
-                            <div class="property-location">
-                                <span class="icon">📍</span>
-                                Madrid VI
-                            </div>
-                            <div class="property-price">280 000₹</div>
-                            <div class="property-actions">
-                                <button class="btn-action btn-edit" onclick="viewDetails(3)">
-                                    <span>👁</span> View Details
-                                </button>
-                                <button class="btn-action btn-delete" onclick="deleteProperty(3)">
-                                    <span>🗑</span> Delete
-                                </button>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <div class="icon">🏠</div>
+                                <h3>No Properties Listed</h3>
+                                <p>You haven't listed any properties yet. Start by adding your first property!</p>
+                                <a href="${pageContext.request.contextPath}/page?name=property_listing" class="btn btn-primary-custom">
+                                    <span>➕</span> Add Your First Property
+                                </a>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </section>

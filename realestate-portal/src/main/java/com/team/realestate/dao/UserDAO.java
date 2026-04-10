@@ -10,18 +10,67 @@ import java.util.List;
 
 import com.team.realestate.db.DBConnection;
 import com.team.realestate.model.User;
+import com.team.realestate.model.Property;
 
 public class UserDAO {
 	
+	
+	public List<Property> getUserPostedProperties(int userId) {
+		List<Property> addedProperties = new ArrayList<>();
+		
+		String allPropertiesForCard = 
+			    "SELECT p.property_id, p.title, p.purpose, p.property_type, p.price, p.bedrooms, p.city, p.locality, p.created_at, " +
+			    "(SELECT image_url FROM property_images WHERE property_id = p.property_id LIMIT 1) AS image_url " +
+			    "FROM properties p " +
+			    "WHERE p.status = 'active' AND p.user_id = ?";
+		
+		try {
+    		Connection con = DBConnection.getConnection();
+    		PreparedStatement ps = con.prepareStatement(allPropertiesForCard);
+    		ps.setInt(1, userId);
+    		ResultSet rs = ps.executeQuery();
+    		
+    		while(rs.next()) {
+    			Property p = new Property();
+
+			    p.setPropertyId(rs.getInt("property_id"));
+			    p.setTitle(rs.getString("title"));
+			    p.setPurpose(rs.getString("purpose"));
+			    p.setPropertyType(rs.getString("property_type"));
+			    p.setPrice(rs.getDouble("price"));
+			    p.setBedrooms(rs.getInt("bedrooms"));
+			    p.setCity(rs.getString("city"));
+			    p.setLocality(rs.getString("locality"));
+			    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+
+			    // image from subquery or join
+			    List<String> images = new ArrayList<>();
+			    String img = rs.getString("image_url");
+			    if (img != null && !img.isEmpty()) {
+			        images.add(img);
+			    }
+			    p.setImages(images);
+
+			    addedProperties.add(p);
+    		}
+			
+		} catch (Exception e ) {
+            e.printStackTrace();
+    	}
+    	return addedProperties;	
+	}
+	
 	public User getUserById(int userId) {
-		User currUser = null;
-		
 		User user = null;
-		String sql = "SELECT * FROM users WHERE userId = ?";
-		
 		try {
 			
 			Connection conn = DBConnection.getConnection();
+			if (conn == null) {
+				System.err.println("Database connection failed in getUserById");
+				return null;
+			}
+			
+			String sql = "SELECT * FROM users WHERE user_id = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
@@ -36,14 +85,18 @@ public class UserDAO {
 				user.setLastName(rs.getString("last_name"));
 				user.setEmail(rs.getString("email"));
 				user.setPasswordHash(rs.getString("password_hash"));
-				
+				user.setPhone(rs.getString("phone"));
+				user.setCreatedAt(rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null);
 			}
+			
+			conn.close();
 			
 		} catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error in getUserById: " + e.getMessage());
         }
 					
-		return currUser;
+		return user;
 	}
 	
 	public List<User> getRecentUser(){
@@ -124,6 +177,7 @@ public class UserDAO {
 				user.setLastName(rs.getString("last_name"));
 				user.setEmail(rs.getString("email"));
 				user.setPasswordHash(rs.getString("password_hash"));
+				user.setRole(rs.getString("role"));
 				
 			}
 			

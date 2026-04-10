@@ -373,50 +373,63 @@
         <!-- Results Header -->
         <div class="results-header">
             <div class="results-count">
-                <span id="resultsCount">1452</span> results found
+                <span id="resultsCount">${resultsCount > 0 ? resultsCount : 'No'}</span> results found
             </div>
-            <select class="sort-dropdown" id="sortBy">
-                <option value="default">Sort by</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="newest">Newest First</option>
-                <option value="bedrooms">Most Bedrooms</option>
+            <select class="sort-dropdown" id="sortBy" onchange="applySortOrSearch()">
+                <option value="default" ${sortBy == 'default' ? 'selected' : ''}>Sort by</option>
+                <option value="price-low" ${sortBy == 'price-low' ? 'selected' : ''}>Price: Low to High</option>
+                <option value="price-high" ${sortBy == 'price-high' ? 'selected' : ''}>Price: High to Low</option>
+                <option value="newest" ${sortBy == 'newest' ? 'selected' : ''}>Newest First</option>
+                <option value="bedrooms" ${sortBy == 'bedrooms' ? 'selected' : ''}>Most Bedrooms</option>
             </select>
         </div>
         
         <!-- Property Cards Grid -->
         <div class="row g-4" id="propertyGrid">
-         	<c:forEach var="property" items="${properties}">
-            	<div class="col-md-6 col-lg-4">
-		            <a href="<%= request.getContextPath() %>/page?name=detailed_view" class="property-link">
-		                <div class="property-card">
-		                    <div class="property-image">
-		                        <c:choose>
-		                            <c:when test="${not empty property.images and property.images.size() > 0}">
-		                                <img src="<%= request.getContextPath() %>/assets/images/property_images/${property.images[0]}" alt="${property.title}" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop'">
-		                            </c:when>
-		                            <c:otherwise>
-		                                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop" alt="Property">
-		                            </c:otherwise>
-		                        </c:choose>
-		                    </div>
-		                    <div class="property-content">
-		                        <h3 class="property-title">${ property.title }</h3>
-		                        <div class="property-price">${ property.price }₹</div>
-		                        <div class="property-location">
-		                            <i class="fas fa-map-marker-alt"></i>
-		                            ${ property.city }
-		                        </div>
-		                    </div>
-		                </div>
-		            </a>
-	            </div>
-            </c:forEach>
-        
-        <!-- Show More Button -->
-        <div class="show-more-container">
-            <button class="show-more-btn">Show more</button>
-        </div>
+         	<c:choose>
+         		<c:when test="${empty properties}">
+         			<div class="col-12">
+         				<div style="text-align: center; padding: 3rem; background: #f9fafb; border-radius: 12px;">
+         					<i class="fas fa-search" style="font-size: 3rem; color: #00CED1; margin-bottom: 1rem;"></i>
+         					<h4 style="color: #2C3E50; margin-top: 1rem;">No properties found</h4>
+         					<p style="color: #6C757D;">Try adjusting your search criteria or filters to find more properties.</p>
+         				</div>
+         			</div>
+         		</c:when>
+         		<c:otherwise>
+         			<c:forEach var="property" items="${properties}">
+	            		<div class="col-md-6 col-lg-4">
+			                <a href="${pageContext.request.contextPath}/property/detail?id=${property.propertyId}" class="property-link">
+			                    <div class="property-card">
+			                        <div class="property-image">
+			                            <c:choose>
+			                                <c:when test="${not empty property.images and property.images.size() > 0}">
+			                                    <img src="<%= request.getContextPath() %>/assets/images/property_images/${property.images[0]}" alt="${property.title}" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop'">
+			                                </c:when>
+			                                <c:otherwise>
+			                                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop" alt="Property">
+			                                </c:otherwise>
+			                            </c:choose>
+			                        </div>
+			                        <div class="property-content">
+			                            <h3 class="property-title">${ property.title }</h3>
+			                            <div class="property-price">${ property.price }₹</div>
+			                            <div class="property-location">
+			                                <i class="fas fa-map-marker-alt"></i>
+			                                ${ property.city }
+			                            </div>
+			                        </div>
+			                    </div>
+			                </a>
+		            	</div>
+	            	</c:forEach>
+         		</c:otherwise>
+         	</c:choose>
+        <c:if test="${not empty properties}">
+            <div class="show-more-container">
+                <button class="show-more-btn">Show more</button>
+            </div>
+        </c:if>
         
     </div>
     
@@ -424,6 +437,62 @@
     <jsp:include page="/WEB-INF/views/component/footer.jsp" />
     
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Get current values from the form
+        function getSearchParams() {
+            const location = document.getElementById('locationInput').value;
+            const propertyType = document.getElementById('propertyType').value;
+            const bedrooms = document.getElementById('bedrooms').value;
+            const priceRange = document.getElementById('priceRange').value;
+            const sortBy = document.getElementById('sortBy').value;
+            
+            return {
+                location: location,
+                propertyType: propertyType,
+                bedrooms: bedrooms,
+                priceRange: priceRange,
+                sortBy: sortBy
+            };
+        }
+        
+        // Perform search with filters
+        function performSearch() {
+            const params = getSearchParams();
+            
+            // Build query string
+            let queryString = '?name=explore';
+            if (params.location) queryString += '&location=' + encodeURIComponent(params.location);
+            if (params.propertyType) queryString += '&propertyType=' + encodeURIComponent(params.propertyType);
+            if (params.bedrooms) queryString += '&bedrooms=' + encodeURIComponent(params.bedrooms);
+            if (params.priceRange) queryString += '&priceRange=' + encodeURIComponent(params.priceRange);
+            if (params.sortBy && params.sortBy !== 'default') queryString += '&sortBy=' + encodeURIComponent(params.sortBy);
+            
+            // Redirect with search parameters
+            window.location.href = '${pageContext.request.contextPath}/page' + queryString;
+        }
+        
+        // Apply sort or search filters
+        function applySortOrSearch() {
+            performSearch();
+        }
+        
+        // Initialize form values on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            // Pre-populate form with current filter values if they exist
+            const currentLocation = '${location}';
+            const currentPropertyType = '${propertyType}';
+            const currentBedrooms = '${bedrooms}';
+            const currentPriceRange = '${priceRange}';
+            const currentSortBy = '${sortBy}';
+            
+            if (currentLocation) document.getElementById('locationInput').value = currentLocation;
+            if (currentPropertyType) document.getElementById('propertyType').value = currentPropertyType;
+            if (currentBedrooms) document.getElementById('bedrooms').value = currentBedrooms;
+            if (currentPriceRange) document.getElementById('priceRange').value = currentPriceRange;
+            if (currentSortBy && currentSortBy !== 'default') document.getElementById('sortBy').value = currentSortBy;
+        });
+    </script>
 </body>
 </html>

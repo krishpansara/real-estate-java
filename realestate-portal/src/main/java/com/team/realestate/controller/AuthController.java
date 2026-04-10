@@ -69,6 +69,7 @@ public class AuthController {
             session.setAttribute("userId", userId);
             session.setAttribute("userName",fname + " " + lname);
             session.setAttribute("userEmail", email);
+            session.setAttribute("userRole", "User");  // Default role for new users
             
             System.out.println("Session created: " + session.getId());
             
@@ -99,14 +100,20 @@ public class AuthController {
 			}
 			HttpSession session = request.getSession(true);
 			
-			// Store session data
+			// Store session data including role
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("userName", user.getFirstName() + " " + user.getLastName());
             session.setAttribute("userEmail", user.getEmail());
+            session.setAttribute("userRole", user.getRole());  // Store user role
             
-            System.out.println("Session created: " + session.getId());
+            System.out.println("Session created: " + session.getId() + ", Role: " + user.getRole());
 
-            return "redirect:/page?name=home";
+            // Redirect based on role
+            if ("Admin".equalsIgnoreCase(user.getRole())) {
+                return "redirect:/page?name=dashboard";  // Redirect admin to dashboard
+            } else {
+                return "redirect:/page?name=home";       // Redirect user to home
+            }
 
         } else {
             return "redirect:/page?name=login";

@@ -54,4 +54,10 @@ public class WebConfig implements WebMvcConfigurer {
 
         return mailSender;
     }
+    @Override
+    public void addInterceptors(org.springframework.web.servlet.config.annotation.InterceptorRegistry registry) {
+        registry.addInterceptor(new com.team.realestate.interceptor.AuthInterceptor())
+                .addPathPatterns("/page")
+                .addPathPatterns("/property/add");
+    }
 }
