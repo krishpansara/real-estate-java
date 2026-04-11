@@ -1,10 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+
+<%
+    // Prevent caching
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+    response.setDateHeader("Expires", 0);
+    
+    // Check if user is logged in - if not, redirect to login
+    if (session.getAttribute("userId") == null) {
+        response.sendRedirect(request.getContextPath() + "/page?name=login");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
     <title>Favorite Properties - Real Estate</title>
 
     <!-- Bootstrap CSS -->
@@ -17,6 +33,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header_style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer_style.css">
+
+    <!-- Prevent Back Navigation Script -->
+    <script>
+        window.onload = function() {
+            // Prevent back button after successful login
+            window.history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', function() {
+                window.history.pushState(null, null, window.location.href);
+            });
+            
+            // Block Alt+Left/Right arrow keys
+            document.addEventListener('keydown', function(e) {
+                if ((e.altKey && e.code === 'ArrowLeft') || (e.altKey && e.code === 'ArrowRight')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        };
+    </script>
 
     <style>
         * {
