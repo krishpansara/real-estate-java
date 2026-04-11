@@ -288,19 +288,37 @@
   <jsp:include page="/WEB-INF/views/component/footer.jsp" />
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
-  <script>
-    // Wishlist toggle
-    let wishlisted = false;
-    function toggleWishlist() {
-      wishlisted = !wishlisted;
-      document.getElementById('wishlistBtn').classList.toggle('wishlisted', wishlisted);
-      document.getElementById('heartIcon').className = wishlisted ? 'fas fa-heart' : 'far fa-heart';
-    }
+<script>
+  const contextPath = "${pageContext.request.contextPath}";
+  const propertyId  = "${property.propertyId}";
 
-    // Carousel counter + dots
+  // ── Wishlist toggle (AJAX) ──────────────────────────────────────────────
+  function toggleWishlist() {
+    $.post(contextPath + "/favorite/toggle", { propertyId: propertyId }, function(res) {
+      if (res === "NOT_LOGGED_IN") {
+        alert("Please log in to save favorites.");
+        window.location.href = contextPath + "/page?name=login";
+        return;
+      }
+      const added = (res === "ADDED");
+      $("#wishlistBtn").toggleClass("wishlisted", added);
+      $("#heartIcon").attr("class", added ? "fas fa-heart" : "far fa-heart");
+    });
+  }
+
+  // ── On page load: check if already favorited ────────────────────────────
+  $(document).ready(function () {
+    $.get(contextPath + "/favorite/check", { propertyId: propertyId }, function(res) {
+      if (res === "YES") {
+        $("#wishlistBtn").addClass("wishlisted");
+        $("#heartIcon").attr("class", "fas fa-heart");
+      }
+    });
+
+    // ── Carousel counter + dots ───────────────────────────────────────────
     const carousel = document.getElementById('imgCarousel');
     const slides   = carousel.querySelectorAll('.carousel-item');
     const total    = slides.length;
@@ -320,41 +338,40 @@
       document.getElementById('imgCurrent').textContent = e.to + 1;
     });
 
-    // jQuery Validation
-    $(document).ready(function () {
-      $("#contactOwnerForm").validate({
-        rules: {
-          message: { required: true, minlength: 10, maxlength: 500 }
-        },
-        messages: {
-          message: {
-            required:  "Please enter your message before sending.",
-            minlength: "Your message must be at least 10 characters long.",
-            maxlength: "Your message cannot exceed 500 characters."
-          }
-        },
-        errorElement: "label",
-        errorClass: "error",
-        validClass: "valid",
-        highlight: function (element) {
-          $(element).removeClass("valid").addClass("error");
-        },
-        unhighlight: function (element) {
-          var val = $(element).val();
-          if (val && val.trim() !== "") {
-            $(element).removeClass("error").addClass("valid");
-          } else {
-            $(element).removeClass("error").removeClass("valid");
-          }
-        },
-        submitHandler: function (form) { form.submit(); }
-      });
-
-      $(".btn-send").on("click", function () {
-        $("#contactOwnerForm textarea").blur();
-      });
+    // ── jQuery Validation ─────────────────────────────────────────────────
+    $("#contactOwnerForm").validate({
+      rules: {
+        message: { required: true, minlength: 10, maxlength: 500 }
+      },
+      messages: {
+        message: {
+          required:  "Please enter your message before sending.",
+          minlength: "Your message must be at least 10 characters long.",
+          maxlength: "Your message cannot exceed 500 characters."
+        }
+      },
+      errorElement: "label",
+      errorClass: "error",
+      validClass: "valid",
+      highlight: function (element) {
+        $(element).removeClass("valid").addClass("error");
+      },
+      unhighlight: function (element) {
+        var val = $(element).val();
+        if (val && val.trim() !== "") {
+          $(element).removeClass("error").addClass("valid");
+        } else {
+          $(element).removeClass("error").removeClass("valid");
+        }
+      },
+      submitHandler: function (form) { form.submit(); }
     });
-  </script>
+
+    $(".btn-send").on("click", function () {
+      $("#contactOwnerForm textarea").blur();
+    });
+  });
+</script>
 
 </body>
 </html>
