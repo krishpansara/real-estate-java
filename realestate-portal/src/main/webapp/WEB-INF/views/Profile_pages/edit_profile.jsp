@@ -1,14 +1,59 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.util.*" %>
+
+<%
+    // Prevent caching
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+    response.setDateHeader("Expires", 0);
+    
+    // Check if user is logged in - if not, redirect to login
+    if (session.getAttribute("userId") == null) {
+        response.sendRedirect(request.getContextPath() + "/page?name=login");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
     <title>Edit Profile - Real Estate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Font Awesome - Multiple CDN Options for Reliability -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Fallback Font Awesome CDN -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+    
+    <!-- Alternative Fallback -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    
+    <!-- Prevent Back Navigation Script -->
+    <script>
+        window.onload = function() {
+            // Prevent back button after successful login
+            window.history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', function() {
+                window.history.pushState(null, null, window.location.href);
+            });
+            
+            // Block Alt+Left/Right arrow keys
+            document.addEventListener('keydown', function(e) {
+                if ((e.altKey && e.code === 'ArrowLeft') || (e.altKey && e.code === 'ArrowRight')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        };
+    </script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; color: #2d3436; }

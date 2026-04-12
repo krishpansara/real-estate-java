@@ -7,11 +7,27 @@
         Password reset successfully! Please login with your new password.
     </div>
 <% } %>
+
+<%
+    // Prevent caching
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+    response.setDateHeader("Expires", 0);
+    
+    // Check if already logged in - redirect to home
+    if (session.getAttribute("userId") != null) {
+        response.sendRedirect(request.getContextPath() + "/page?name=home");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
     <title>Login - Real Estate</title>
 
     <!-- Bootstrap CSS -->

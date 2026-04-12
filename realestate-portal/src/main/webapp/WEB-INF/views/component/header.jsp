@@ -126,7 +126,6 @@
 
         <nav class="nav">
             <a href="${pageContext.request.contextPath}/">Home</a>
-            <a href="${pageContext.request.contextPath}/page?name=top_offers">Top offers</a>
             <a href="${pageContext.request.contextPath}/page?name=explore">Explore</a>
             <a href="${pageContext.request.contextPath}/page?name=about">About us</a>
             <a href="${pageContext.request.contextPath}/page?name=contact_us">Contact us</a>
@@ -218,5 +217,27 @@
                 btn.focus();
             }
         });
+    })();
+    
+    // Check for access denied error in URL and show alert
+    (function () {
+        const url = new URL(window.location);
+        const error = url.searchParams.get('error');
+        
+        if (error === 'access_denied') {
+            // Show alert
+            alert('⛔ Access Denied! You do not have permission to access the admin panel. Only admins can access this area.');
+            
+            // Remove error parameter from URL (clean up)
+            url.searchParams.delete('error');
+            window.history.replaceState({}, document.title, url.toString());
+        } else if (error === 'admin_restricted') {
+            // Show alert for admin restricted pages
+            alert('⛔ Restricted Access! This page is for users only. Admins cannot access user-specific pages.');
+            
+            // Remove error parameter from URL (clean up)
+            url.searchParams.delete('error');
+            window.history.replaceState({}, document.title, url.toString());
+        }
     })();
 </script>

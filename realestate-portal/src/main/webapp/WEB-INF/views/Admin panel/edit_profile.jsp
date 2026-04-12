@@ -1,11 +1,46 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%
+    // Prevent caching
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+    response.setDateHeader("Expires", 0);
+    
+    // Check if user is logged in and is Admin - if not, redirect to login
+    if (session.getAttribute("userId") == null || !"Admin".equalsIgnoreCase((String) session.getAttribute("userRole"))) {
+        response.sendRedirect(request.getContextPath() + "/page?name=login");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
 <title>Edit Property</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/shared.css">
+
+<!-- Prevent Back Navigation Script -->
+<script>
+    window.onload = function() {
+        // Prevent back button after successful login
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', function() {
+            window.history.pushState(null, null, window.location.href);
+        });
+        
+        // Block Alt+Left/Right arrow keys
+        document.addEventListener('keydown', function(e) {
+            if ((e.altKey && e.code === 'ArrowLeft') || (e.altKey && e.code === 'ArrowRight')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    };
+</script>
 
 <style>
 .form-container {
