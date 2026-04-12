@@ -50,15 +50,22 @@ public class PageController {
             return "property_listing/property_listing";
         }
         else if ("profile".equals(name)) {
-            return "Profile_pages/profile";
+            // Redirect to the proper controller
+            return "redirect:/profile";
         }
+        else if ("edit_profile".equals(name)) {
+            return "redirect:/edit-profile";
+        }
+//        else if ("profile".equals(name)) {
+//            return "Profile_pages/profile";
+//        }
         else if ("favourite".equals(name)) {
             // Handled by FavoriteController at GET /favorites
             return "redirect:/favorites";
         }
-        else if ("edit_profile".equals(name)) {
-            return "Profile_pages/edit_profile";
-        }
+//        else if ("edit_profile".equals(name)) {
+//            return "Profile_pages/edit_profile";
+//        }
         else if ("forgot_password".equals(name)) {
             return "auth/forgot_password";
         }

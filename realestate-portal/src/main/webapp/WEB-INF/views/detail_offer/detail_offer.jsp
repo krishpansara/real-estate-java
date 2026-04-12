@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +61,19 @@
     .ftag { display: inline-flex; align-items: center; gap: 6px; background: rgba(29,209,161,.08); border: 1px solid rgba(29,209,161,.2); border-radius: 8px; padding: 7px 14px; font-size: 13px; }
     .ftag i { color: var(--primary-dark); font-size: .85rem; }
     .map-frame { width: 100%; height: 260px; border: 0; border-radius: 12px; display: block; }
-    .owner-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(29,209,161,.3); }
+
+    /* Owner avatar */
+    .owner-avatar-wrap { width: 56px; height: 56px; border-radius: 50%; border: 3px solid rgba(29,209,161,.3); overflow: hidden; flex-shrink: 0; }
+    .owner-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .owner-avatar-initials {
+        width: 56px; height: 56px; border-radius: 50%;
+        background: linear-gradient(135deg, #1dd1a1, #10ac84);
+        border: 3px solid rgba(29,209,161,.3);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem; font-weight: 600; color: white;
+        flex-shrink: 0; text-transform: uppercase;
+    }
+
     .btn-send { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: #fff; border: none; border-radius: 10px; padding: 12px; font-weight: 600; font-size: 14px; font-family: 'Poppins', sans-serif; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity .2s, transform .15s; }
     .btn-send:hover { opacity: .9; transform: translateY(-1px); }
     .form-control { border-radius: 10px !important; border: 1.5px solid #e9ecef !important; background: var(--bg) !important; font-family: 'Poppins', sans-serif; font-size: 13.5px; }
@@ -242,9 +255,22 @@
 
             <div class="d-flex align-items-center gap-3 mb-4 p-3"
                  style="background:rgba(29,209,161,.05);border-radius:12px;border:1px solid rgba(29,209,161,.15)">
-              <img src="https://i.pravatar.cc/150?img=12" class="owner-avatar" alt="Owner">
+
+              <%-- Owner avatar: real photo from DB, or initials fallback via JS (no fn taglib needed) --%>
+              <c:choose>
+                <c:when test="${not empty property.ownerProfilePicture}">
+                  <div class="owner-avatar-wrap">
+                    <img src="${pageContext.request.contextPath}/assets/images/profile_pictures/${property.ownerProfilePicture}"
+                         alt="${property.ownerFirstName}">
+                  </div>
+                </c:when>
+                <c:otherwise>
+                  <div class="owner-avatar-initials" id="ownerInitials"></div>
+                </c:otherwise>
+              </c:choose>
+
               <div>
-                <div style="font-weight:600;font-size:15px">
+                <div style="font-weight:600;font-size:15px" id="ownerFullName">
                   ${property.ownerFirstName} ${property.ownerLastName}
                 </div>
                 <div style="font-size:13px;color:var(--muted);margin-top:3px">
@@ -263,7 +289,6 @@
                   action="${pageContext.request.contextPath}/message/send"
                   method="post" novalidate>
 
-              <%-- Hidden field: property ID --%>
               <input type="hidden" name="propertyId" value="${property.propertyId}">
 
               <div class="mb-3">
@@ -288,14 +313,27 @@
   <jsp:include page="/WEB-INF/views/component/footer.jsp" />
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
 <script>
   const contextPath = "${pageContext.request.contextPath}";
   const propertyId  = "${property.propertyId}";
 
-  // ── Wishlist toggle (AJAX) ──────────────────────────────────────────────
+  // ── Initials avatar — reads the name already rendered in the DOM.
+  //    No fn taglib needed at all.
+  (function () {
+    const el = document.getElementById('ownerInitials');
+    if (!el) return; // owner has a photo, initials div not rendered
+    const name   = (document.getElementById('ownerFullName').textContent || '').trim();
+    const parts  = name.split(/\s+/).filter(Boolean);
+    const initials = parts.length >= 2
+      ? parts[0][0] + parts[parts.length - 1][0]
+      : parts[0] ? parts[0][0] : '?';
+    el.textContent = initials.toUpperCase();
+  })();
+
+  // ── Wishlist toggle ────────────────────────────────────────────────────
   function toggleWishlist() {
     $.post(contextPath + "/favorite/toggle", { propertyId: propertyId }, function(res) {
       if (res === "NOT_LOGGED_IN") {
@@ -309,8 +347,9 @@
     });
   }
 
-  // ── On page load: check if already favorited ────────────────────────────
   $(document).ready(function () {
+
+    // ── Check if already favorited ─────────────────────────────────────
     $.get(contextPath + "/favorite/check", { propertyId: propertyId }, function(res) {
       if (res === "YES") {
         $("#wishlistBtn").addClass("wishlisted");
@@ -318,7 +357,7 @@
       }
     });
 
-    // ── Carousel counter + dots ───────────────────────────────────────────
+    // ── Carousel counter + dots ────────────────────────────────────────
     const carousel = document.getElementById('imgCarousel');
     const slides   = carousel.querySelectorAll('.carousel-item');
     const total    = slides.length;
@@ -338,7 +377,7 @@
       document.getElementById('imgCurrent').textContent = e.to + 1;
     });
 
-    // ── jQuery Validation ─────────────────────────────────────────────────
+    // ── jQuery Validation ──────────────────────────────────────────────
     $("#contactOwnerForm").validate({
       rules: {
         message: { required: true, minlength: 10, maxlength: 500 }

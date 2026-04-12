@@ -33,7 +33,6 @@ public class PropertyDAO {
 			    p.setLocality(rs.getString("locality"));
 			    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 
-			    // image from subquery or join
 			    List<String> images = new ArrayList<>();
 			    String img = rs.getString("image_url");
 			    if (img != null && !img.isEmpty()) {
@@ -52,35 +51,27 @@ public class PropertyDAO {
 	
 	public List<Property> getAllProperties(){
 		List<Property> properties = new ArrayList<>();
-		
 		String allProperties = "SELECT * FROM `properties`";
-		
 		try {
     		Connection con = DBConnection.getConnection();
     		PreparedStatement ps = con.prepareStatement(allProperties);
     		ResultSet rs = ps.executeQuery();
-    		
     		while(rs.next()) {
     			
     		}
-			
 		} catch (Exception e ) {
             e.printStackTrace();
     	}
-    	
     	return properties;
 	}
     
     public List<Property> getRecentProperties(){
     	List<Property> property_list = new ArrayList<>();
     	String recentProprtySql = "SELECT `title`, `property_type`, `price`, `status` FROM `properties` ORDER BY `created_at` DESC LIMIT 7";
-    	
     	try {
-    		
     		Connection con = DBConnection.getConnection();
     		PreparedStatement ps = con.prepareStatement(recentProprtySql);
     		ResultSet rs = ps.executeQuery();
-    		
     		while( rs.next() ) {
 				Property p = new Property();
 				p.setTitle(rs.getString("title"));
@@ -89,24 +80,19 @@ public class PropertyDAO {
 				p.setPrice(rs.getDouble("price"));
 				property_list.add(p);
     		}
-    		
     	} catch ( Exception e ) {
             e.printStackTrace();
     	}
-    	
     	return property_list;
     }
     
     public List<Property> getAllAdminProperties(){
     	List<Property> property_list = new ArrayList<>();
     	String proprtySql = "SELECT `property_id`, `title`, `purpose`, `property_type`, `price`, `city`,`status`, `created_at` FROM `properties`";
-    	
     	try {
-    		
     		Connection con = DBConnection.getConnection();
     		PreparedStatement ps = con.prepareStatement(proprtySql);
     		ResultSet rs = ps.executeQuery();
-    		
     		while( rs.next() ) {
 				Property p = new Property();
 				p.setPropertyId(rs.getInt("property_id"));
@@ -119,17 +105,13 @@ public class PropertyDAO {
 				p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 				property_list.add(p);
     		}
-    		
     	} catch ( Exception e ) {
             e.printStackTrace();
     	}
-    	
     	return property_list;
     }
 
-    // INSERT PROPERTY
     public int insertProperty(Property p, int userId) {
-
         int id = 0;
         try {
             Connection con = DBConnection.getConnection();
@@ -168,7 +150,6 @@ public class PropertyDAO {
         return id;
     }
 
-    // ✅ Unchanged
     public void insertImages(int propertyId, List<String> images) {
         try {
             Connection con = DBConnection.getConnection();
@@ -185,13 +166,14 @@ public class PropertyDAO {
         }
     }
 
-    // ✅ New — fetch property with owner info
+    // ✅ FIXED: also fetch u.profile_picture so detail page can show owner's photo
     public Property getPropertyById(int propertyId) {
         Property p = null;
         try {
             Connection con = DBConnection.getConnection();
             String sql = "SELECT pr.*, " +
-                         "u.first_name, u.last_name, u.email AS owner_email, u.phone " +
+                         "u.first_name, u.last_name, u.email AS owner_email, " +
+                         "u.phone, u.profile_picture AS owner_profile_picture " +
                          "FROM properties pr " +
                          "JOIN users u ON pr.user_id = u.user_id " +
                          "WHERE pr.property_id = ?";
@@ -224,6 +206,7 @@ public class PropertyDAO {
                 p.setOwnerLastName(rs.getString("last_name"));
                 p.setOwnerEmail(rs.getString("owner_email"));
                 p.setOwnerPhone(rs.getString("phone"));
+                p.setOwnerProfilePicture(rs.getString("owner_profile_picture")); // ✅ NEW
                 p.setImages(getImagesByPropertyId(propertyId));
             }
         } catch (Exception e) {
@@ -232,7 +215,6 @@ public class PropertyDAO {
         return p;
     }
 
-    // ✅ New — fetch images
     public List<String> getImagesByPropertyId(int propertyId) {
         List<String> images = new ArrayList<>();
         try {
@@ -248,5 +230,52 @@ public class PropertyDAO {
             e.printStackTrace();
         }
         return images;
+    }
+
+    public List<Property> getPropertiesByUserId(int userId) {
+        List<Property> list = new ArrayList<>();
+        String sql = "SELECT p.property_id, p.title, p.purpose, p.property_type, p.price, " +
+                     "p.city, p.locality, p.status, p.created_at, " +
+                     "(SELECT image_url FROM property_images WHERE property_id = p.property_id LIMIT 1) AS image_url " +
+                     "FROM properties p WHERE p.user_id = ? ORDER BY p.created_at DESC";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Property p = new Property();
+                p.setPropertyId(rs.getInt("property_id"));
+                p.setTitle(rs.getString("title"));
+                p.setPurpose(rs.getString("purpose"));
+                p.setPropertyType(rs.getString("property_type"));
+                p.setPrice(rs.getDouble("price"));
+                p.setCity(rs.getString("city"));
+                p.setLocality(rs.getString("locality"));
+                p.setStatus(rs.getString("status"));
+                p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                List<String> images = new ArrayList<>();
+                String img = rs.getString("image_url");
+                if (img != null && !img.isEmpty()) images.add(img);
+                p.setImages(images);
+                list.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void deletePropertyByIdAndUser(int propertyId, int userId) {
+        String sql = "DELETE FROM properties WHERE property_id = ? AND user_id = ?";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, propertyId);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

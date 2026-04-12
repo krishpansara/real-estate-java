@@ -153,4 +153,14 @@ public class User {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
+ // Add this field
+    private String aadharNumber;
+
+    // Add getter and setter
+    public String getAadharNumber() {
+        return aadharNumber;
+    }
+    public void setAadharNumber(String aadharNumber) {
+        this.aadharNumber = aadharNumber;
+    }
 }
