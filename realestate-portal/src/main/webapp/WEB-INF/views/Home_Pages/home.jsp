@@ -5,6 +5,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
     <title>Real Estate</title>
 
     <!-- Bootstrap CSS (ADD THIS) -->
@@ -17,6 +19,25 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header_style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/footer_style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+
+    <!-- Prevent Back Navigation Script -->
+    <script>
+        window.onload = function() {
+            // Prevent back button after successful login
+            window.history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', function() {
+                window.history.pushState(null, null, window.location.href);
+            });
+            
+            // Block Alt+Left/Right arrow keys
+            document.addEventListener('keydown', function(e) {
+                if ((e.altKey && e.code === 'ArrowLeft') || (e.altKey && e.code === 'ArrowRight')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        };
+    </script>
 
 </head>
 

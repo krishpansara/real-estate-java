@@ -1,0 +1,54 @@
+:root {
+  --d-h1-font-family: "Merriweather", Helvetica;
+  --d-h1-font-weight: 700;
+  --d-h1-font-size: 64.8499984741211px;
+  --d-h1-letter-spacing: 0px;
+  --d-h1-line-height: 120.00000476837158%;
+  --d-h1-font-style: normal;
+  --d-p-font-family: "Open Sans", Helvetica;
+  --d-p-font-weight: 400;
+  --d-p-font-size: 17px;
+  --d-p-letter-spacing: 0px;
+  --d-p-line-height: 150%;
+  --d-p-font-style: normal;
+  --d-p-bold-font-family: "Open Sans", Helvetica;
+  --d-p-bold-font-weight: 700;
+  --d-p-bold-font-size: 17px;
+  --d-p-bold-letter-spacing: 0px;
+  --d-p-bold-line-height: 150%;
+  --d-p-bold-font-style: normal;
+  --real-estate-color-white: rgba(255, 255, 255, 1);
+  --real-estate-color-dark-blue: rgba(9, 22, 56, 1);
+  --real-estate-color-dark-gray: rgba(136, 143, 159, 1);
+  --real-estate-color-blue: rgba(28, 57, 136, 1);
+}
+
+/*
+
+To enable a theme in your HTML, simply add one of the following data attributes to an HTML element, like so:
+
+<body data-real-estate-mode="blue">
+    <!-- the rest of your content -->
+</body>
+
+You can apply the theme on any DOM node, not just the `body`
+
+*/
+
+[data-real-estate-mode="blue"] {
+  --real-estate-color-dark-blue: rgba(9, 22, 56, 1);
+  --real-estate-color-dark-gray: rgba(136, 143, 159, 1);
+  --real-estate-color-blue: rgba(28, 57, 136, 1);
+}
+
+[data-real-estate-mode="red"] {
+  --real-estate-color-dark-blue: rgba(45, 41, 38, 1);
+  --real-estate-color-dark-gray: rgba(158, 136, 143, 1);
+  --real-estate-color-blue: rgba(228, 0, 70, 1);
+}
+
+[data-real-estate-mode="turquoise"] {
+  --real-estate-color-dark-blue: rgba(38, 45, 45, 1);
+  --real-estate-color-dark-gray: rgba(136, 158, 157, 1);
+  --real-estate-color-blue: rgba(23, 194, 177, 1);
+}
