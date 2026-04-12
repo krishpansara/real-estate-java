@@ -1,12 +1,48 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%
+    // Prevent caching
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+    response.setDateHeader("Expires", 0);
+    
+    // Check if user is logged in and is Admin - if not, redirect to login
+    if (session.getAttribute("userId") == null || !"Admin".equalsIgnoreCase((String) session.getAttribute("userRole"))) {
+        response.sendRedirect(request.getContextPath() + "/page?name=login");
+        return;
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
 <title>Admin - Dashboard</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/shared.css">
+
+<!-- Prevent Back Navigation Script -->
+<script>
+    window.onload = function() {
+        // Prevent back button after successful login
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', function() {
+            window.history.pushState(null, null, window.location.href);
+        });
+        
+        // Block Alt+Left/Right arrow keys
+        document.addEventListener('keydown', function(e) {
+            if ((e.altKey && e.code === 'ArrowLeft') || (e.altKey && e.code === 'ArrowRight')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    };
+</script>
 <style>
   .stats-grid {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;
@@ -32,19 +68,8 @@
 <body>
 
 <!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="sidebar-logo">Real<span>Estate</span></div>
-  <a class="nav-item  active" href="${pageContext.request.contextPath}/page?name=dashboard">
-  	 Dashboard
-  </a>
-  <a class="nav-item" href="${pageContext.request.contextPath}/page?name=users">
-     Users
-  </a>
-  <a class="nav-item" href="${pageContext.request.contextPath}/page?name=properties">
-     Properties
-  </a>
-</div>
-
+   <jsp:include page="/WEB-INF/views/Admin panel/componant/sidebar.jsp" />
+   
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
@@ -56,18 +81,25 @@
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-label">Total Properties</div>
-      <div class="stat-value">184</div>
+      <div class="stat-value">${stats.getTotalProperties()}</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Active Listings</div>
-      <div class="stat-value">97</div>
+      <div class="stat-value">${stats.getActiveListings()}</div>
     </div>
+
+     <div class="stat-card">
+      <div class="stat-label">Sold Properties</div>
+      <div class="stat-value">${stats.getTsoldProperties()}</div>
+    </div>
+    
+
     <div class="stat-card">
       <div class="stat-label">Total Users</div>
-      <div class="stat-value">312</div>
+      <div class="stat-value">${stats.getTotalUsers()}</div>
     </div>
-  </div>
 
+       </div>
   <!-- RECENT TABLES -->
   <div class="recent-grid">
 
@@ -78,29 +110,28 @@
       </div>
       <table>
         <thead>
-          <tr><th>Property</th><th>Type</th><th>Price</th><th>Status</th></tr>
+          <tr>
+          	<th>Property</th>
+          	<th>Type</th>
+          	<th>Price</th>
+          	<th>Status</th>
+         </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Green Valley Villa</td><td>Villa</td><td>1.2 Cr</td>
-            <td><span class="badge badge-green">Active</span></td>
+        <c:forEach var="rp" items="${recentProperties}">
+         <tr>
+            <td>${rp.title}</td>
+            <td>${rp.propertyType }</td>
+            <td>${rp.price }</td>
+            <td><span class="badge 
+			    ${rp.status eq 'active' ? 'badge-green' : 
+		      	rp.status eq 'pending' ? 'badge-orange' : 
+			    rp.status eq 'sold' ? 'badge-red' : ''}">
+			    ${rp.status}
+			</span></td>
           </tr>
-          <tr>
-            <td>Sky Tower Apt 4B</td><td>Apartment</td><td>45 L</td>
-            <td><span class="badge badge-green">Active</span></td>
-          </tr>
-          <tr>
-            <td>Sunrise Plot - 12</td><td>Plot</td><td>18 L</td>
-            <td><span class="badge badge-orange">Pending</span></td>
-          </tr>
-          <tr>
-            <td>Blue Lake Cottage</td><td>Bungalow</td><td>78 L</td>
-            <td><span class="badge badge-red">Sold</span></td>
-          </tr>
-          <tr>
-            <td>Prime Commercial Space</td><td>Commercial</td><td>2.1 Cr</td>
-            <td><span class="badge badge-green">Active</span></td>
-          </tr>
+        
+        </c:forEach>
         </tbody>
       </table>
     </div>
@@ -112,29 +143,20 @@
       </div>
       <table>
         <thead>
-          <tr><th>Name</th><th>Role</th><th>Joined</th><th>Status</th></tr>
+          <tr>
+	          <th>Name</th>
+	          <th>Role</th>
+	          <th>Joined</th>
+          </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Rohan Mehta</td><td>Buyer</td><td>18 Feb 2026</td>
-            <td><span class="badge badge-green">Active</span></td>
-          </tr>
-          <tr>
-            <td>Priya Sharma</td><td>Agent</td><td>17 Feb 2026</td>
-            <td><span class="badge badge-green">Active</span></td>
-          </tr>
-          <tr>
-            <td>Amit Patel</td><td>Seller</td><td>15 Feb 2026</td>
-            <td><span class="badge badge-orange">Inactive</span></td>
-          </tr>
-          <tr>
-            <td>Neha Joshi</td><td>Buyer</td><td>14 Feb 2026</td>
-            <td><span class="badge badge-green">Active</span></td>
-          </tr>
-          <tr>
-            <td>Karan Singhvi</td><td>Seller</td><td>12 Feb 2026</td>
-            <td><span class="badge badge-green">Active</span></td>
-          </tr>
+          <c:forEach var='recentUser' items="${recentUsers}">
+	          <tr>
+	          	<td>${empty recentUser.firstName ? "-" : recentUser.firstName } </td>
+	          	<td>${empty recentUser.role ? "-" : recentUser.role } </td>
+	          	<td>${empty recentUser.createdAt ? "-" : recentUser.createdAt } </td>
+	          </tr>
+          </c:forEach>
         </tbody>
       </table>
     </div>

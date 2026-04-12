@@ -1,31 +1,53 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%
+    // Prevent caching
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+    response.setDateHeader("Expires", 0);
+    
+    // Check if user is logged in and is Admin - if not, redirect to login
+    if (session.getAttribute("userId") == null || !"Admin".equalsIgnoreCase((String) session.getAttribute("userRole"))) {
+        response.sendRedirect(request.getContextPath() + "/page?name=login");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
 <title>Admin - Properties</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/shared.css">
+
+<!-- Prevent Back Navigation Script -->
+<script>
+    window.onload = function() {
+        // Prevent back button after successful login
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', function() {
+            window.history.pushState(null, null, window.location.href);
+        });
+        
+        // Block Alt+Left/Right arrow keys
+        document.addEventListener('keydown', function(e) {
+            if ((e.altKey && e.code === 'ArrowLeft') || (e.altKey && e.code === 'ArrowRight')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    };
+</script>
 
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="sidebar-logo">Real<span>Estate</span></div>
-
-  <a class="nav-item" href="${pageContext.request.contextPath}/page?name=dashboard">
-     Dashboard
-  </a>
-
-  <a class="nav-item " href="${pageContext.request.contextPath}/page?name=users">
-     Users
-  </a>
-
-  <a class="nav-item active"  href="${pageContext.request.contextPath}/page?name=properties">
-     Properties
-  </a>
-</div>
+<!-- SIDEBAR -->
+   <jsp:include page="/WEB-INF/views/Admin panel/componant/sidebar.jsp" />
 
 <div class="main">
   <div class="topbar">
@@ -39,82 +61,37 @@
         <tr>
           <th>#</th>
           <th>Title</th>
-          <th>Location</th>
+          <th>City</th>
           <th>Type</th>
           <th>Price</th>
           <th>Status</th>
+          <th>Posted On</th>
           <th>Actions</th>
         </tr>
       </thead>
 
       <tbody>
-
-        <tr>
-          <td>1</td>
-          <td>Green Villa</td>
-          <td>Rajkot</td>
-          <td>Villa</td>
-          <td>1.2 Cr</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-                        <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            <button class="btn btn-delete">Delete</button>
+      <c:forEach var="p" items="${ propertiesList }">
+      	<tr>
+      		<td>${p.propertyId}</td>
+      		<td>${p.title}</td>
+      		<td>${p.city}</td>
+      		<td>${p.propertyType}</td>
+      		<td>${p.price}</td>
+      		 <td><span class="badge 
+			    ${p.status eq 'active' ? 'badge-green' : 
+		      	p.status eq 'pending' ? 'badge-orange' : 
+			    p.status eq 'sold' ? 'badge-red' : ''}">
+			    ${p.status}
+			</span></td>
+      		<td>${p.createdAt}</td>
+      		<td>
+            	<button class="btn btn-edit" onClick="openAddModal()">Edit</button>
+            	<button class="btn btn-delete">Delete</button>
           </td>
-        </tr>
-
-        <tr>
-          <td>2</td>
-          <td>Sky Apartment</td>
-          <td>Ahmedabad</td>
-          <td>Apartment</td>
-          <td>45 L</td>
-          <td><span class="badge badge-orange">Pending</span></td>
-          <td>
-                        <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>3</td>
-          <td>Sunrise Plot</td>
-          <td>Surat</td>
-          <td>Plot</td>
-          <td>18 L</td>
-          <td><span class="badge badge-red">Sold</span></td>
-          <td>            
-          <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>4</td>
-          <td>Blue Lake Cottage</td>
-          <td>Vadodara</td>
-          <td>Bungalow</td>
-          <td>78 L</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-      <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>5</td>
-          <td>Prime Commercial Space</td>
-          <td>Ahmedabad</td>
-          <td>Commercial</td>
-          <td>2.1 Cr</td>
-          <td><span class="badge badge-green">Active</span></td>
-          <td>
-            <button class="btn btn-edit" onClick="openAddModal()">Edit</button>
-            
-            <button class="btn btn-delete">Delete</button>
-          </td>
-        </tr>
-
+      	</tr>
+      
+      </c:forEach>
       </tbody>
     </table>
   </div>
