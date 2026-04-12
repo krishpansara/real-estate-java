@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!-- Add this in your login.jsp where you show error messages -->
+<% if("success".equals(request.getParameter("passwordReset"))) { %>
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle me-2"></i>
+        Password reset successfully! Please login with your new password.
+    </div>
+<% } %>
 
 <%
     // Prevent caching

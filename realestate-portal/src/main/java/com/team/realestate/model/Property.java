@@ -29,9 +29,9 @@ public class Property {
     private String ownerLastName;
     private String ownerEmail;
     private String ownerPhone;
+    private String ownerProfilePicture; // ✅ NEW
 
     private List<String> images;
-
     private LocalDateTime createdAt;
 
 
@@ -103,6 +103,10 @@ public class Property {
 
     public String getOwnerPhone() { return ownerPhone; }
     public void setOwnerPhone(String ownerPhone) { this.ownerPhone = ownerPhone; }
+
+    // ✅ NEW getter/setter for owner profile picture
+    public String getOwnerProfilePicture() { return ownerProfilePicture; }
+    public void setOwnerProfilePicture(String ownerProfilePicture) { this.ownerProfilePicture = ownerProfilePicture; }
 
     public List<String> getImages() { return images; }
     public void setImages(List<String> images) { this.images = images; }
