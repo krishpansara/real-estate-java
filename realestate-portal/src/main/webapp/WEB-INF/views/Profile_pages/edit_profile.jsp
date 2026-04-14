@@ -180,6 +180,18 @@
         }
         .error-message { color: #ff0000; font-size: 0.85rem; margin-top: 5px; display: none; }
         .input-error { border-color: #ff0000 !important; }
+        .forgot-password-link {
+            display: inline-block;
+            margin-top: 0.65rem;
+            font-size: 0.9rem;
+            color: #10ac84;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .forgot-password-link:hover {
+            color: #0e8f6f;
+            text-decoration: underline;
+        }
 
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
@@ -390,6 +402,10 @@
                                 <input type="password" class="form-control" id="currentPassword"
                                        name="currentPassword" placeholder="Enter current password">
                             </div>
+                            <a class="forgot-password-link"
+                               href="${pageContext.request.contextPath}/page?name=forgot_password">
+                                Forgot password?
+                            </a>
                         </div>
 
                         <div class="mb-3">

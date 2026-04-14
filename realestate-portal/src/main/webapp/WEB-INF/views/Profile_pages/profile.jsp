@@ -197,6 +197,12 @@
                             <span>Profile updated successfully!</span>
                         </div>
                     </c:if>
+                    <c:if test="${param.propertyUpdated == 'true'}">
+                        <div class="alert-success-custom">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Property updated successfully!</span>
+                        </div>
+                    </c:if>
 
                     <div class="profile-card text-center">
                         <!-- Avatar -->
@@ -286,7 +292,7 @@
                     <div class="row">
                         <c:forEach var="prop" items="${userProperties}">
                             <div class="col-lg-4 col-md-6">
-                                <div class="property-card">
+                                <div class="property-card" onclick="window.location.href='${pageContext.request.contextPath}/property/detail?id=${prop.propertyId}'" style="cursor:pointer;">
                                     <div class="property-image">
                                         <c:choose>
                                             <c:when test="${not empty prop.images}">
@@ -297,8 +303,6 @@
                                             </c:otherwise>
                                         </c:choose>
 
-                                        <%-- ✅ FIXED: c:choose inside class attribute is invalid JSP.
-                                             Use EL ternary expression instead. --%>
                                         <span class="property-badge ${prop.status == 'active' ? 'badge-active' : prop.status == 'sold' ? 'badge-sold' : 'badge-inactive'}">
                                             ${prop.status}
                                         </span>
@@ -310,18 +314,16 @@
                                             ${prop.locality}<c:if test="${not empty prop.locality && not empty prop.city}">, </c:if>${prop.city}
                                         </div>
                                         <span class="property-type-badge">${prop.propertyType} • For ${prop.purpose}</span>
-
-                                        <%-- ✅ FIXED: Added fmt taglib at top of file so this now works --%>
                                         <div class="property-price">₹<fmt:formatNumber value="${prop.price}" pattern="#,##,##0"/></div>
 
-                                        <div class="property-actions">
-                                            <a href="${pageContext.request.contextPath}/property/detail?id=${prop.propertyId}" class="btn-action btn-edit">
-                                                <i class="fas fa-eye"></i> View
+                                        <div class="property-actions" onclick="event.stopPropagation();">
+                                            <a href="${pageContext.request.contextPath}/property/edit?id=${prop.propertyId}" class="btn-action btn-edit">
+                                                <i class="fas fa-pen"></i> Edit
                                             </a>
                                             <form method="post" action="${pageContext.request.contextPath}/property/delete" style="flex:1; margin:0;">
                                                 <input type="hidden" name="propertyId" value="${prop.propertyId}">
                                                 <button type="submit" class="btn-action btn-delete w-100"
-                                                        onclick="return confirm('Delete this property? This cannot be undone.')">
+                                                        onclick="event.stopPropagation(); return confirm('Delete this property? This cannot be undone.')">
                                                     <i class="fas fa-trash-alt"></i> Delete
                                                 </button>
                                             </form>

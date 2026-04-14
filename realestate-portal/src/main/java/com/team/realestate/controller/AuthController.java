@@ -125,7 +125,7 @@ public class AuthController {
             }
 
         } else {
-            return "redirect:/page?name=login";
+            return "redirect:/page?name=login&error=invalid_credentials";
         }
     }
 	

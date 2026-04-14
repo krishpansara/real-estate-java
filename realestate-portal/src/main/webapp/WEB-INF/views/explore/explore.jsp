@@ -426,11 +426,13 @@
          		</c:otherwise>
          	</c:choose>
         <c:if test="${not empty properties}">
-            <div class="show-more-container">
-                <button class="show-more-btn">Show more</button>
+            <div class="col-12">
+                <div class="show-more-container">
+                    <button class="show-more-btn">Show more</button>
+                </div>
             </div>
         </c:if>
-        
+        </div>
     </div>
     
     <!-- Footer -->

@@ -21,7 +21,7 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
         
         // Check if user is trying to access login or sign_up pages while logged in
-        if (("login".equals(pageName) || "sign_up".equals(pageName) || "forgot_password".equals(pageName))
+        if (("login".equals(pageName) || "sign_up".equals(pageName))
                 && session != null && session.getAttribute("userId") != null) {
             // User is logged in, redirect to home
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/page?name=home");

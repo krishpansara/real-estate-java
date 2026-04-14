@@ -75,6 +75,9 @@
 				<c:if test="${param.error == 'empty_fields'}">
 				    <p style="color:red;">All fields are required.</p>
 				</c:if>
+				<c:if test="${param.error == 'invalid_credentials'}">
+				    <p style="color:red;">Invalid email or password.</p>
+				</c:if>
 
 			</div>
             <form class="login-form" 
