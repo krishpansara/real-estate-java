@@ -7,8 +7,24 @@ import com.team.realestate.db.DBConnection;
 import com.team.realestate.model.Property;
 
 public class PropertyDAO {
+    private void deactivateExpiredProperties() {
+        String updateExpiredPropertiesSql =
+                "UPDATE properties " +
+                "SET status = 'inactive' " +
+                "WHERE status = 'active' " +
+                "AND created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(updateExpiredPropertiesSql);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 	public List<Property> getAllPropertiesForCard(){
 		List<Property> propertiesForCard = new ArrayList<>();
+		deactivateExpiredProperties();
 		
 		String allPropertiesForCard = 
 			    "SELECT p.property_id, p.title, p.purpose, p.property_type, p.price, p.bedrooms, p.city, p.locality, p.created_at, " +
@@ -33,7 +49,6 @@ public class PropertyDAO {
 			    p.setLocality(rs.getString("locality"));
 			    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 
-			    // image from subquery or join
 			    List<String> images = new ArrayList<>();
 			    String img = rs.getString("image_url");
 			    if (img != null && !img.isEmpty()) {
@@ -52,6 +67,7 @@ public class PropertyDAO {
 	
 	public List<Property> searchPropertiesForCard(String location, String propertyType, String bedrooms, String priceRange, String sortBy){
 		List<Property> propertiesForCard = new ArrayList<>();
+		deactivateExpiredProperties();
 		
 		StringBuilder query = new StringBuilder(
 			    "SELECT p.property_id, p.title, p.purpose, p.property_type, p.price, p.bedrooms, p.city, p.locality, p.created_at, " +
@@ -164,35 +180,29 @@ public class PropertyDAO {
 	
 	public List<Property> getAllProperties(){
 		List<Property> properties = new ArrayList<>();
-		
+		deactivateExpiredProperties();
 		String allProperties = "SELECT * FROM `properties`";
-		
 		try {
     		Connection con = DBConnection.getConnection();
     		PreparedStatement ps = con.prepareStatement(allProperties);
     		ResultSet rs = ps.executeQuery();
-    		
     		while(rs.next()) {
     			
     		}
-			
 		} catch (Exception e ) {
             e.printStackTrace();
     	}
-    	
     	return properties;
 	}
     
     public List<Property> getRecentProperties(){
     	List<Property> property_list = new ArrayList<>();
+    	deactivateExpiredProperties();
     	String recentProprtySql = "SELECT `title`, `property_type`, `price`, `status` FROM `properties` ORDER BY `created_at` DESC LIMIT 7";
-    	
     	try {
-    		
     		Connection con = DBConnection.getConnection();
     		PreparedStatement ps = con.prepareStatement(recentProprtySql);
     		ResultSet rs = ps.executeQuery();
-    		
     		while( rs.next() ) {
 				Property p = new Property();
 				p.setTitle(rs.getString("title"));
@@ -201,24 +211,20 @@ public class PropertyDAO {
 				p.setPrice(rs.getDouble("price"));
 				property_list.add(p);
     		}
-    		
     	} catch ( Exception e ) {
             e.printStackTrace();
     	}
-    	
     	return property_list;
     }
     
     public List<Property> getAllAdminProperties(){
     	List<Property> property_list = new ArrayList<>();
+    	deactivateExpiredProperties();
     	String proprtySql = "SELECT `property_id`, `title`, `purpose`, `property_type`, `price`, `city`,`status`, `created_at` FROM `properties`";
-    	
     	try {
-    		
     		Connection con = DBConnection.getConnection();
     		PreparedStatement ps = con.prepareStatement(proprtySql);
     		ResultSet rs = ps.executeQuery();
-    		
     		while( rs.next() ) {
 				Property p = new Property();
 				p.setPropertyId(rs.getInt("property_id"));
@@ -231,17 +237,13 @@ public class PropertyDAO {
 				p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 				property_list.add(p);
     		}
-    		
     	} catch ( Exception e ) {
             e.printStackTrace();
     	}
-    	
     	return property_list;
     }
 
-    // INSERT PROPERTY
     public int insertProperty(Property p, int userId) {
-
         int id = 0;
         try {
             Connection con = DBConnection.getConnection();
@@ -280,7 +282,6 @@ public class PropertyDAO {
         return id;
     }
 
-    // ✅ Unchanged
     public void insertImages(int propertyId, List<String> images) {
         try {
             Connection con = DBConnection.getConnection();
@@ -297,13 +298,15 @@ public class PropertyDAO {
         }
     }
 
-    // ✅ New — fetch property with owner info
+    // ✅ FIXED: also fetch u.profile_picture so detail page can show owner's photo
     public Property getPropertyById(int propertyId) {
         Property p = null;
+        deactivateExpiredProperties();
         try {
             Connection con = DBConnection.getConnection();
             String sql = "SELECT pr.*, " +
-                         "u.first_name, u.last_name, u.email AS owner_email, u.phone " +
+                         "u.first_name, u.last_name, u.email AS owner_email, " +
+                         "u.phone, u.profile_picture AS owner_profile_picture " +
                          "FROM properties pr " +
                          "JOIN users u ON pr.user_id = u.user_id " +
                          "WHERE pr.property_id = ?";
@@ -336,6 +339,7 @@ public class PropertyDAO {
                 p.setOwnerLastName(rs.getString("last_name"));
                 p.setOwnerEmail(rs.getString("owner_email"));
                 p.setOwnerPhone(rs.getString("phone"));
+                p.setOwnerProfilePicture(rs.getString("owner_profile_picture")); // ✅ NEW
                 p.setImages(getImagesByPropertyId(propertyId));
             }
         } catch (Exception e) {
@@ -344,7 +348,6 @@ public class PropertyDAO {
         return p;
     }
 
-    // ✅ New — fetch images
     public List<String> getImagesByPropertyId(int propertyId) {
         List<String> images = new ArrayList<>();
         try {
@@ -365,6 +368,7 @@ public class PropertyDAO {
     // Get properties by user ID
     public List<Property> getPropertiesByUserId(int userId) {
         List<Property> properties = new ArrayList<>();
+        deactivateExpiredProperties();
         try {
             Connection con = DBConnection.getConnection();
             if (con == null) {
@@ -402,5 +406,110 @@ public class PropertyDAO {
             System.err.println("Error in getPropertiesByUserId: " + e.getMessage());
         }
         return properties;
+    }
+
+    // Delete a property only if it belongs to the user
+    public boolean deletePropertyByIdAndUser(int propertyId, int userId) {
+        String sql = "DELETE FROM properties WHERE property_id = ? AND user_id = ?";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, propertyId);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updatePropertyStatus(int propertyId, String status) {
+        String sql = "UPDATE properties SET status = ? WHERE property_id = ?";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            ps.setInt(2, propertyId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Property getPropertyByIdAndUser(int propertyId, int userId) {
+        Property p = null;
+        deactivateExpiredProperties();
+        String sql = "SELECT * FROM properties WHERE property_id = ? AND user_id = ?";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, propertyId);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                p = new Property();
+                p.setPropertyId(rs.getInt("property_id"));
+                p.setUserId(rs.getInt("user_id"));
+                p.setTitle(rs.getString("title"));
+                p.setDescription(rs.getString("description"));
+                p.setPurpose(rs.getString("purpose"));
+                p.setPropertyType(rs.getString("property_type"));
+                p.setPrice(rs.getDouble("price"));
+                p.setBedrooms(rs.getInt("bedrooms"));
+                p.setBathrooms(rs.getInt("bathrooms"));
+                p.setAreaSize(rs.getInt("area_size"));
+                p.setPropertyAge(rs.getInt("property_age"));
+                p.setFurnishing(rs.getString("furnishing"));
+                p.setFacing(rs.getString("facing"));
+                p.setAvailability(rs.getString("availability"));
+                p.setPriceNegotiable(rs.getBoolean("price_negotiable"));
+                p.setCity(rs.getString("city"));
+                p.setLocality(rs.getString("locality"));
+                p.setGoogleMapUrl(rs.getString("google_map_url"));
+                p.setStatus(rs.getString("status"));
+                p.setImages(getImagesByPropertyId(propertyId));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return p;
+    }
+
+    public boolean updatePropertyByUser(Property p, int userId) {
+        String sql = "UPDATE properties SET " +
+                "title = ?, description = ?, purpose = ?, property_type = ?, price = ?, " +
+                "bedrooms = ?, bathrooms = ?, area_size = ?, property_age = ?, furnishing = ?, " +
+                "facing = ?, availability = ?, price_negotiable = ?, city = ?, locality = ?, " +
+                "google_map_url = ?, status = ? " +
+                "WHERE property_id = ? AND user_id = ?";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, p.getTitle());
+            ps.setString(2, p.getDescription());
+            ps.setString(3, p.getPurpose());
+            ps.setString(4, p.getPropertyType());
+            ps.setDouble(5, p.getPrice());
+            ps.setInt(6, p.getBedrooms());
+            ps.setInt(7, p.getBathrooms());
+            ps.setInt(8, p.getAreaSize());
+            ps.setInt(9, p.getPropertyAge());
+            ps.setString(10, p.getFurnishing());
+            ps.setString(11, p.getFacing());
+            ps.setString(12, p.getAvailability());
+            ps.setBoolean(13, p.isPriceNegotiable());
+            ps.setString(14, p.getCity());
+            ps.setString(15, p.getLocality());
+            ps.setString(16, p.getGoogleMapUrl());
+            ps.setString(17, p.getStatus());
+            ps.setInt(18, p.getPropertyId());
+            ps.setInt(19, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -14,8 +14,7 @@ import com.team.realestate.model.User;
 
 import jakarta.servlet.http.HttpServletRequest;
 @Controller
-public class PageController {
-    
+public class PageController {    
     // Add this method for root path
 	@GetMapping("/page")
 	public String page(@RequestParam("name") String name,  
@@ -75,16 +74,18 @@ List<Property> properties;
 	    else if ("property_listing".equals(name)) {
 	        return "property_listing/property_listing";
 	    }
-	    else if ("profile".equals(name)) {
-	    
-	        return "Profile_pages/profile";
-	    }
-	    else if ("favourite".equals(name)) {
-	        return "Favorite/Favorite";
-	    }
-	    else if ("edit_profile".equals(name)) {  
-	        return "Profile_pages/edit_profile";
-	    } 
+      else if ("profile".equals(name)) {
+            // Redirect to the proper controller
+            return "redirect:/profile";
+        }
+        else if ("edit_profile".equals(name)) {
+            return "redirect:/edit-profile";
+        }
+
+        else if ("favourite".equals(name)) {
+            // Handled by FavoriteController at GET /favorites
+            return "redirect:/favorites";
+        }
 	    else if ("forgot_password".equals(name)) {
 	        return "auth/forgot_password";
 	    }

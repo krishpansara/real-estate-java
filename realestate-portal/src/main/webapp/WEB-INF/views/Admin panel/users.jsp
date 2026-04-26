@@ -50,6 +50,45 @@
     justify-content:space-between;
     margin-bottom:16px;
   }
+  .status-message {
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .status-success {
+    background: #e8f8ef;
+    color: #1f7a45;
+    border: 1px solid #bfe7cf;
+  }
+  .status-error {
+    background: #fdeeee;
+    color: #a12a2a;
+    border: 1px solid #f5c2c2;
+  }
+  .user-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .user-detail {
+    background: #f8f9fb;
+    border: 1px solid #e9edf3;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .user-detail label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  .user-detail p {
+    margin: 0;
+    font-weight: 600;
+    color: #222;
+    word-break: break-word;
+  }
 </style>
 </head>
 <body>
@@ -70,6 +109,18 @@
     <button class="btn btn-primary" onclick="openAddModal()">+ Add User</button>
  -->
   </div>
+  <c:if test="${param.success == 'role_updated'}">
+    <div class="status-message status-success">User role updated successfully.</div>
+  </c:if>
+  <c:if test="${not empty param.error}">
+    <div class="status-message status-error">
+      <c:choose>
+        <c:when test="${param.error == 'invalid_role'}">Invalid role selected. Choose User or Admin.</c:when>
+        <c:when test="${param.error == 'role_update_failed'}">Unable to update role. Please try again.</c:when>
+        <c:otherwise>Something went wrong. Please try again.</c:otherwise>
+      </c:choose>
+    </div>
+  </c:if>
   <div class="card">
   
     <table>
@@ -98,7 +149,19 @@
           <td>${empty user.city ? "-" : user.city}</td>
           <td>${empty user.createdAt ? "-" : user.createdAt}</td>
           <td>
-            <button class="btn btn-edit">Edit</button>
+            <button
+                class="btn btn-edit"
+                onclick="openEditModal(this)"
+                data-userid="${user.userId}"
+                data-firstname="${empty user.firstName ? '-' : user.firstName}"
+                data-lastname="${empty user.lastName ? '-' : user.lastName}"
+                data-email="${empty user.email ? '-' : user.email}"
+                data-phone="${empty user.phone ? '-' : user.phone}"
+                data-city="${empty user.city ? '-' : user.city}"
+                data-role="${empty user.role ? 'User' : user.role}"
+                data-joined="${empty user.createdAt ? '-' : user.createdAt}">
+                Edit
+            </button>
             <button class="btn btn-delete">Delete</button>
           </td>
         </tr>
@@ -107,55 +170,47 @@
       </tbody>
     </table>
   </div>
-  <!-- ADD / EDIT USER MODAL -->
+  <!-- EDIT USER ROLE MODAL -->
 	<div class="modal-overlay" id="user-modal">
 	  <div class="modal">
-	    <h3 id="modal-title">Add New User</h3>
-	    <input type="hidden" id="edit-id">
-	
-	    <div class="form-row">
-	      <div class="form-group">
-	        <label>Full Name *</label>
-	        <input type="text" id="u-name" placeholder="Enter full name">
+	    <h3 id="modal-title">Edit User</h3>
+	    <form action="${pageContext.request.contextPath}/admin/users/update-role" method="post">
+	      <input type="hidden" id="edit-id" name="userId">
+
+          <div class="user-details-grid">
+            <div class="user-detail">
+              <label>Full Name</label>
+              <p id="detail-name">-</p>
+            </div>
+            <div class="user-detail">
+              <label>Email</label>
+              <p id="detail-email">-</p>
+            </div>
+            <div class="user-detail">
+              <label>Phone</label>
+              <p id="detail-phone">-</p>
+            </div>
+            <div class="user-detail">
+              <label>City</label>
+              <p id="detail-city">-</p>
+            </div>
+            <div class="user-detail">
+              <label>Joined On</label>
+              <p id="detail-joined">-</p>
+            </div>
+            <div class="form-group">
+              <label for="u-role">Role</label>
+              <select id="u-role" name="role" required>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+	        <button type="submit" class="btn btn-primary">Save Role</button>
 	      </div>
-	      <div class="form-group">
-	        <label>Email *</label>
-	        <input type="email" id="u-email" placeholder="Enter email">
-	      </div>
-	    </div>
-	
-	    <div class="form-row">
-	      <div class="form-group">
-	        <label>Phone</label>
-	        <input type="text" id="u-phone" placeholder="Enter phone number">
-	      </div>
-	      <div class="form-group">
-	        <label>Role</label>
-	        <select id="u-role">
-	          <option>User</option>
-	          <option>Admin</option>
-	        </select>
-	      </div>
-	    </div>
-	
-	    <div class="form-row">
-	      <div class="form-group">
-	        <label>Status</label>
-	        <select id="u-status">
-	          <option>Active</option>
-	          <option>Inactive</option>
-	        </select>
-	      </div>
-	      <div class="form-group">
-	        <label>City</label>
-	        <input type="text" id="u-city" placeholder="Enter city">
-	      </div>
-	    </div>
-	
-	    <div class="modal-footer">
-	      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-	      <button class="btn btn-primary" onclick="saveUser()">Save User</button>
-	    </div>
+	    </form>
 	  </div>
 	</div>
   
@@ -163,47 +218,23 @@
 </div>
 
 <script>
-function openAddModal() {
-  document.getElementById('modal-title').textContent = 'Add New User';
-  document.getElementById('edit-id').value = '';
-  ['u-name','u-email','u-phone','u-city'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('u-role').value   = 'User';
-  document.getElementById('u-status').value = 'Active';
+function openEditModal(button) {
+  document.getElementById('modal-title').textContent = 'Edit User';
+  document.getElementById('edit-id').value = button.dataset.userid;
+  document.getElementById('detail-name').textContent = (button.dataset.firstname || '-') + ' ' + (button.dataset.lastname || '');
+  document.getElementById('detail-email').textContent = button.dataset.email || '-';
+  document.getElementById('detail-phone').textContent = button.dataset.phone || '-';
+  document.getElementById('detail-city').textContent = button.dataset.city || '-';
+  document.getElementById('detail-joined').textContent = button.dataset.joined || '-';
+
+  const role = (button.dataset.role || 'User').toLowerCase();
+  document.getElementById('u-role').value = role === 'admin' ? 'admin' : 'user';
   document.getElementById('user-modal').classList.add('open');
 }
-
 
 function closeModal() {
   document.getElementById('user-modal').classList.remove('open');
 }
-
-function saveUser() {
-  const name = document.getElementById('u-name').value.trim();
-  const email = document.getElementById('u-email').value.trim();
-  if (!name || !email) { alert('Name and Email are required.'); return; }
-
-  const id = document.getElementById('edit-id').value;
-  const user = {
-    id:      id ? parseInt(id) : nextId++,
-    name,
-    email,
-    phone:   document.getElementById('u-phone').value.trim(),
-    role:    document.getElementById('u-role').value,
-    city:    document.getElementById('u-city').value.trim(),
-    joined:  id ? users.find(u => u.id === parseInt(id)).joined : today(),
-    status:  document.getElementById('u-status').value,
-  };
-
-  if (id) {
-    const idx = users.findIndex(u => u.id === parseInt(id));
-    users[idx] = user;
-  } else {
-    users.push(user);
-  }
-  closeModal();
-  filterUsers();
-}
-
 </script>
 </body>
 </html>

@@ -117,4 +117,65 @@ public class PropertyController {
 
         return "explore";
     }
+
+    @GetMapping("/edit")
+    public String editPropertyPage(
+            @RequestParam("id") int propertyId,
+            HttpServletRequest request,
+            Model model) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            return "redirect:/page?name=login";
+        }
+
+        int userId = (int) session.getAttribute("userId");
+        Property property = dao.getPropertyByIdAndUser(propertyId, userId);
+        if (property == null) {
+            return "redirect:/profile";
+        }
+
+        model.addAttribute("property", property);
+        return "property_listing/edit_property";
+    }
+
+    @PostMapping("/update")
+    public String updateProperty(
+            @RequestParam Map<String, String> params,
+            HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            return "redirect:/page?name=login";
+        }
+
+        int userId = (int) session.getAttribute("userId");
+        Property p = new Property();
+        try {
+            p.setPropertyId(Integer.parseInt(params.get("propertyId")));
+            p.setTitle(params.get("title"));
+            p.setDescription(params.get("description"));
+            String purpose = params.get("purpose");
+            p.setPurpose(purpose != null ? purpose.toLowerCase() : "sale");
+            p.setPropertyType(params.get("propertyType"));
+            p.setPrice(Double.parseDouble(params.get("price")));
+            p.setBedrooms(Integer.parseInt(params.get("bedrooms")));
+            p.setBathrooms(Integer.parseInt(params.get("bathrooms")));
+            p.setAreaSize(Integer.parseInt(params.get("areaSize")));
+            p.setPropertyAge(params.get("propertyAge") == null || params.get("propertyAge").isEmpty()
+                    ? 0 : Integer.parseInt(params.get("propertyAge")));
+            p.setFurnishing(params.get("furnishing"));
+            p.setFacing(params.get("facing"));
+            p.setAvailability(params.get("availability"));
+            p.setPriceNegotiable("Yes".equals(params.get("negotiable")));
+            p.setCity(params.get("city"));
+            p.setLocality(params.get("locality"));
+            p.setGoogleMapUrl(params.get("mapEmbedUrl"));
+            p.setStatus(params.containsKey("markAsSold") ? "sold" : "active");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/profile";
+        }
+
+        dao.updatePropertyByUser(p, userId);
+        return "redirect:/profile?propertyUpdated=true";
+    }
 }
