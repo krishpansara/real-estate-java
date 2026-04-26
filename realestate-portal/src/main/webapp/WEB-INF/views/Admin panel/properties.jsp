@@ -42,6 +42,47 @@
         });
     };
 </script>
+<style>
+  .status-message {
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .status-success {
+    background: #e8f8ef;
+    color: #1f7a45;
+    border: 1px solid #bfe7cf;
+  }
+  .status-error {
+    background: #fdeeee;
+    color: #a12a2a;
+    border: 1px solid #f5c2c2;
+  }
+  .property-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .property-detail {
+    background: #f8f9fb;
+    border: 1px solid #e9edf3;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .property-detail label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  .property-detail p {
+    margin: 0;
+    font-weight: 600;
+    color: #222;
+    word-break: break-word;
+  }
+</style>
 
 </head>
 <body>
@@ -54,6 +95,18 @@
     <h2>Property Management</h2>
     <span class="admin-badge">Admin</span>
   </div>
+  <c:if test="${param.success == 'status_updated'}">
+    <div class="status-message status-success">Property status updated successfully.</div>
+  </c:if>
+  <c:if test="${not empty param.error}">
+    <div class="status-message status-error">
+      <c:choose>
+        <c:when test="${param.error == 'invalid_status'}">Invalid status selected. Choose Active or Inactive.</c:when>
+        <c:when test="${param.error == 'status_update_failed'}">Unable to update property status. Please try again.</c:when>
+        <c:otherwise>Something went wrong. Please try again.</c:otherwise>
+      </c:choose>
+    </div>
+  </c:if>
 
   <div class="card">
     <table>
@@ -80,13 +133,26 @@
       		<td>${p.price}</td>
       		 <td><span class="badge 
 			    ${p.status eq 'active' ? 'badge-green' : 
-		      	p.status eq 'pending' ? 'badge-orange' : 
+		      	p.status eq 'inactive' ? 'badge-red' : 
+			    p.status eq 'pending' ? 'badge-orange' :
 			    p.status eq 'sold' ? 'badge-red' : ''}">
 			    ${p.status}
 			</span></td>
       		<td>${p.createdAt}</td>
       		<td>
-            	<button class="btn btn-edit" onClick="openAddModal()">Edit</button>
+            	<button
+                class="btn btn-edit"
+                onclick="openEditModal(this)"
+                data-propertyid="${p.propertyId}"
+                data-title="${p.title}"
+                data-city="${p.city}"
+                data-type="${p.propertyType}"
+                data-price="${p.price}"
+                data-purpose="${p.purpose}"
+                data-status="${p.status}"
+                data-posted="${p.createdAt}">
+                Edit
+              </button>
             	<button class="btn btn-delete">Delete</button>
           </td>
       	</tr>
@@ -95,76 +161,52 @@
       </tbody>
     </table>
   </div>
-<!-- ADD / EDIT PROPERTY MODAL -->
+<!-- EDIT PROPERTY STATUS MODAL -->
 <div class="modal-overlay" id="prop-modal">
   <div class="modal">
-    <h3 id="modal-title">Add New Property</h3>
-    <input type="hidden" id="edit-id">
+    <h3 id="modal-title">Edit Property</h3>
+    <form action="${pageContext.request.contextPath}/admin/properties/update-status" method="post">
+      <input type="hidden" id="edit-id" name="propertyId">
 
-    <div class="form-group">
-      <label>Property Title *</label>
-      <input type="text" id="p-title" placeholder="e.g. Green Valley Villa">
-    </div>
+      <div class="property-details-grid">
+        <div class="property-detail">
+          <label>Title</label>
+          <p id="detail-title">-</p>
+        </div>
+        <div class="property-detail">
+          <label>City</label>
+          <p id="detail-city">-</p>
+        </div>
+        <div class="property-detail">
+          <label>Type</label>
+          <p id="detail-type">-</p>
+        </div>
+        <div class="property-detail">
+          <label>Purpose</label>
+          <p id="detail-purpose">-</p>
+        </div>
+        <div class="property-detail">
+          <label>Price</label>
+          <p id="detail-price">-</p>
+        </div>
+        <div class="property-detail">
+          <label>Posted On</label>
+          <p id="detail-posted">-</p>
+        </div>
+        <div class="form-group">
+          <label for="p-status">Status</label>
+          <select id="p-status" name="status" required>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Location / City *</label>
-        <input type="text" id="p-location" placeholder="e.g. Rajkot">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Status</button>
       </div>
-      <div class="form-group">
-        <label>Type</label>
-        <select id="p-type">
-          <option>Apartment</option>
-          <option>Villa</option>
-          <option>Plot</option>
-          <option>Bungalow</option>
-          <option>Commercial</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Price</label>
-        <input type="text" id="p-price" placeholder="e.g. ₹45 Lakh">
-      </div>
-      <div class="form-group">
-        <label>Area</label>
-        <input type="text" id="p-area" placeholder="e.g. 1200">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Bedrooms</label>
-        <select id="p-beds">
-          <option>1 BHK</option>
-          <option>2 BHK</option>
-          <option>3 BHK</option>
-          <option>4 BHK</option>
-          <option>4+ BHK</option>
-          <option>N/A</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select id="p-status">
-          <option>Active</option>
-          <option>Pending</option>
-          <option>Sold</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Description</label>
-      <textarea id="p-desc" rows="3" placeholder="Short description (optional)..."></textarea>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveProperty()">Save Property</button>
-    </div>
+    </form>
   </div>
 </div>
 </div>
@@ -174,13 +216,17 @@ function closeModal() {
 	  document.getElementById('prop-modal').classList.remove('open');
 	}
 	
-function openAddModal() {
-	  document.getElementById('modal-title').textContent = 'Add New Property';
-	  document.getElementById('edit-id').value = '';
-	  ['p-title','p-location','p-price','p-area','p-desc'].forEach(id => document.getElementById(id).value = '');
-	  document.getElementById('p-type').value   = 'Apartment';
-	  document.getElementById('p-beds').value   = '2 BHK';
-	  document.getElementById('p-status').value = 'Active';
+function openEditModal(button) {
+	  document.getElementById('modal-title').textContent = 'Edit Property';
+	  document.getElementById('edit-id').value = button.dataset.propertyid;
+	  document.getElementById('detail-title').textContent = button.dataset.title || '-';
+	  document.getElementById('detail-city').textContent = button.dataset.city || '-';
+	  document.getElementById('detail-type').textContent = button.dataset.type || '-';
+	  document.getElementById('detail-purpose').textContent = button.dataset.purpose || '-';
+	  document.getElementById('detail-price').textContent = button.dataset.price || '-';
+	  document.getElementById('detail-posted').textContent = button.dataset.posted || '-';
+	  const status = (button.dataset.status || 'active').toLowerCase();
+	  document.getElementById('p-status').value = status === 'inactive' ? 'inactive' : 'active';
 	  document.getElementById('prop-modal').classList.add('open');
 	}
 

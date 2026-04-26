@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%
     // Prevent caching
@@ -49,6 +50,39 @@
     display:flex;
     justify-content:space-between;
     margin-bottom:16px;
+  }
+  .message-preview {
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .message-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .message-detail {
+    background: #f8f9fb;
+    border: 1px solid #e9edf3;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .message-detail-full {
+    grid-column: 1 / -1;
+  }
+  .message-detail label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  .message-detail p {
+    margin: 0;
+    font-weight: 600;
+    color: #222;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 </style>
 </head>
@@ -104,17 +138,25 @@
 		    
 		    <td>${empty cm.subject ? "-" : cm.subject}</td>
 		    
-		    <td>
-		      ${empty cm.message ? "-" : cm.message}
-		    </td>
+		    <td class="message-preview">${empty cm.message ? "-" : cm.message}</td>
 		    
 		    <td>
 		      ${empty cm.submittedAt ? "-" : cm.submittedAt}
 		    </td>
 		    
 		    <td>
-		      <button class="btn btn-edit">Edit</button>
-		      <button class="btn btn-delete">Delete</button>
+		      <button
+                  class="btn btn-edit"
+                  onclick="openViewModal(this)"
+                  data-id="${cm.id}"
+                  data-name="<c:out value='${empty cm.firstName ? "-" : cm.firstName} ${empty cm.lastName ? "" : cm.lastName}'/>"
+                  data-email="<c:out value='${empty cm.email ? "-" : cm.email}'/>"
+                  data-phone="<c:out value='${empty cm.phone ? "-" : cm.phone}'/>"
+                  data-subject="<c:out value='${empty cm.subject ? "-" : cm.subject}'/>"
+                  data-message="<c:out value='${empty cm.message ? "-" : cm.message}'/>"
+                  data-submitted="<c:out value='${empty cm.submittedAt ? "-" : cm.submittedAt}'/>">
+                  View
+              </button>
 		    </td>
 		  </tr>
 		</c:forEach>
@@ -123,60 +165,65 @@
 
     </table>
   </div>
-  <!-- ADD / EDIT USER MODAL -->
-	<div class="modal-overlay" id="user-modal">
+  <!-- VIEW CONTACT MESSAGE MODAL -->
+	<div class="modal-overlay" id="view-message-modal">
 	  <div class="modal">
-	    <h3 id="modal-title">Add New User</h3>
-	    <input type="hidden" id="edit-id">
-	
-	    <div class="form-row">
-	      <div class="form-group">
-	        <label>Full Name *</label>
-	        <input type="text" id="u-name" placeholder="Enter full name">
-	      </div>
-	      <div class="form-group">
-	        <label>Email *</label>
-	        <input type="email" id="u-email" placeholder="Enter email">
-	      </div>
-	    </div>
-	
-	    <div class="form-row">
-	      <div class="form-group">
-	        <label>Phone</label>
-	        <input type="text" id="u-phone" placeholder="Enter phone number">
-	      </div>
-	      <div class="form-group">
-	        <label>Role</label>
-	        <select id="u-role">
-	          <option>User</option>
-	          <option>Admin</option>
-	        </select>
-	      </div>
-	    </div>
-	
-	    <div class="form-row">
-	      <div class="form-group">
-	        <label>Status</label>
-	        <select id="u-status">
-	          <option>Active</option>
-	          <option>Inactive</option>
-	        </select>
-	      </div>
-	      <div class="form-group">
-	        <label>City</label>
-	        <input type="text" id="u-city" placeholder="Enter city">
-	      </div>
-	    </div>
-	
+	    <h3>Contact Message Details</h3>
+        <div class="message-details-grid">
+          <div class="message-detail">
+            <label>ID</label>
+            <p id="view-id">-</p>
+          </div>
+          <div class="message-detail">
+            <label>Name</label>
+            <p id="view-name">-</p>
+          </div>
+          <div class="message-detail">
+            <label>Email</label>
+            <p id="view-email">-</p>
+          </div>
+          <div class="message-detail">
+            <label>Phone</label>
+            <p id="view-phone">-</p>
+          </div>
+          <div class="message-detail">
+            <label>Subject</label>
+            <p id="view-subject">-</p>
+          </div>
+          <div class="message-detail">
+            <label>Submitted At</label>
+            <p id="view-submitted">-</p>
+          </div>
+          <div class="message-detail message-detail-full">
+            <label>Message</label>
+            <p id="view-message">-</p>
+          </div>
+        </div>
 	    <div class="modal-footer">
-	      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-	      <button class="btn btn-primary" onclick="saveUser()">Save User</button>
+	      <button class="btn btn-primary" onclick="closeViewModal()">Close</button>
 	    </div>
 	  </div>
 	</div>
   
 
 </div>
+
+<script>
+function openViewModal(button) {
+  document.getElementById('view-id').textContent = button.dataset.id || '-';
+  document.getElementById('view-name').textContent = button.dataset.name || '-';
+  document.getElementById('view-email').textContent = button.dataset.email || '-';
+  document.getElementById('view-phone').textContent = button.dataset.phone || '-';
+  document.getElementById('view-subject').textContent = button.dataset.subject || '-';
+  document.getElementById('view-submitted').textContent = button.dataset.submitted || '-';
+  document.getElementById('view-message').textContent = button.dataset.message || '-';
+  document.getElementById('view-message-modal').classList.add('open');
+}
+
+function closeViewModal() {
+  document.getElementById('view-message-modal').classList.remove('open');
+}
+</script>
 
 </body>
 </html>

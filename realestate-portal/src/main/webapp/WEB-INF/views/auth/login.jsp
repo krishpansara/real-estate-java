@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!-- Add this in your login.jsp where you show error messages -->
+<% if("success".equals(request.getParameter("passwordReset"))) { %>
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle me-2"></i>
+        Password reset successfully! Please login with your new password.
+    </div>
+<% } %>
 
 <%
     // Prevent caching
@@ -67,6 +74,9 @@
 
 				<c:if test="${param.error == 'empty_fields'}">
 				    <p style="color:red;">All fields are required.</p>
+				</c:if>
+				<c:if test="${param.error == 'invalid_credentials'}">
+				    <p style="color:red;">Invalid email or password.</p>
 				</c:if>
 
 			</div>
